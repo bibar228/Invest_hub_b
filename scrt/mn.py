@@ -2,6 +2,8 @@ from telethon import TelegramClient, events, sync
 from keys import api_id, api_hash
 from re import search
 import telebot
+from datetime import datetime
+
 
 trade_pairs_bybit = ['1INCHUSDT', '1SOLUSDT', '3PUSDT', '5IREUSDT', 'AAVEUSDT', 'ACAUSDT', 'ACHUSDT', 'ACMUSDT', 'ACSUSDT',
                    'ADA2LUSDT', 'ADA2SUSDT', 'ADAUSDT', 'AFCUSDT', 'AFGUSDT', 'AGIUSDT', 'AGIXUSDT', 'AGLAUSDT', 'AGLDUSDT',
@@ -64,27 +66,30 @@ for dialog in client.iter_dialogs():
     chats[dialog.id] = dialog.name
 print(chats)
 
-@client.on(events.NewMessage(chats=['BIBAK222', "CAZADOR CRYPTO", "Плечо Профессора", "Maloletoff | Crypto-Angel", "Crypto▫️Man💎", "Trade Community"]))
+@client.on(events.NewMessage(chats=["Пит", "Турнички и Братишки", "CAZADOR CRYPTO", "Плечо Профессора", "Maloletoff | Crypto-Angel", "Crypto▫️Man💎", "Trade Community"]))
 async def normal_handler(event):
     info = event.message.to_dict()
     print(info)
-    chat_inf = int(info["peer_id"]["chat_id"])
     mes = info['message'].split()
-    print(chat_inf)
-    print(mes)
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
     try:
-        ch = chats[chat_inf]
-    except:
-        ch = chats[-chat_inf]
+        ch = chats[event.chat_id]
+    except Exception as e:
+        telebot.TeleBot(telega_token).send_message(chat_id, f"ОШИБКА - {e}\n"
+                                                            f"Не смог определить группу")
     try:
         true_mes = mes[0]+mes[1]+mes[2]+mes[3]+mes[4]+mes[5]+mes[6]
         x = [i for i in trade_pairs_bybit if search(i[:-4], true_mes)]
         print(true_mes)
         result = sorted(x, key=lambda x: -len(x))[0]
         telebot.TeleBot(telega_token).send_message(chat_id, f"Закупаем - {result}\n"
-                                                            f"Группа - {ch}")
-    except:
-        pass
+                                                            f"Группа - {ch}\n"
+                                                            f"Время: {current_time}")
+    except Exception as e:
+        telebot.TeleBot(telega_token).send_message(chat_id, f"ОШИБКА - {e}\n"
+                                                            f"Группа - {ch}\n"
+                                                            f"Время: {current_time}")
 
 
 
