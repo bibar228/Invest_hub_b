@@ -64,9 +64,8 @@ chats = {}
 
 for dialog in client.iter_dialogs():
     chats[dialog.id] = dialog.name
-print(chats)
 
-@client.on(events.NewMessage(chats=["Пит", "Турнички и Братишки", "CAZADOR CRYPTO", "Плечо Профессора", "Maloletoff | Crypto-Angel", "Crypto▫️Man💎", "Trade Community"]))
+@client.on(events.NewMessage(chats=["CAZADOR CRYPTO", "Плечо Профессора", "Maloletoff | Crypto-Angel", "Crypto▫️Man💎", "Trade Community"]))
 async def normal_handler(event):
     info = event.message.to_dict()
     print(info)
