@@ -4,7 +4,6 @@ from re import search
 import telebot
 from datetime import datetime
 
-
 trade_pairs_bybit = ['1INCHUSDT', '1SOLUSDT', '3PUSDT', '5IREUSDT', 'AAVEUSDT', 'ACAUSDT', 'ACHUSDT', 'ACMUSDT', 'ACSUSDT',
                    'ADA2LUSDT', 'ADA2SUSDT', 'ADAUSDT', 'AFCUSDT', 'AFGUSDT', 'AGIUSDT', 'AGIXUSDT', 'AGLAUSDT', 'AGLDUSDT',
                    'AIOZUSDT', 'AKIUSDT', 'ALGOUSDT', 'ANKRUSDT', 'APE2LUSDT', 'APE2SUSDT', 'APEUSDT', 'APEXUSDT', 'APPUSDT',
@@ -35,18 +34,18 @@ trade_pairs_bybit = ['1INCHUSDT', '1SOLUSDT', '3PUSDT', '5IREUSDT', 'AAVEUSDT', 
                    'MMCUSDT', 'MNTUSDT', 'MNZUSDT', 'MOVEZUSDT', 'MOVRUSDT', 'MPLXUSDT', 'MTCUSDT', 'MTKUSDT', 'MUSDUSDT', 'MVLUSDT',
                    'MVUSDT', 'MXMUSDT', 'MXUSDT', 'MYRIAUSDT', 'MYROUSDT', 'NEARUSDT', 'NEONUSDT', 'NESSUSDT', 'NEXOUSDT', 'NEXTUSDT',
                    'NFTUSDT', 'NYMUSDT', 'OASUSDT', 'OBXUSDT', 'OKGUSDT', 'OMGUSDT', 'OMNIUSDT', 'OMNUSDT', 'ONDOUSDT', 'ONEUSDT',
-                   'OPUSDT', 'ORDIUSDT', 'ORTUSDT', 'PAXGUSDT', 'PENDLEUSDT', 'PEOPLEUSDT', 'PEPE2USDT', 'PEPEUSDT', 'PERPUSDT',
+                   'OPUSDT', 'ORDIUSDT', 'PAXGUSDT', 'PENDLEUSDT', 'PEOPLEUSDT', 'PEPE2USDT', 'PEPEUSDT', 'PERPUSDT',
                    'PIPUSDT', 'PLANETUSDT', 'PLAYUSDT', 'PLTUSDT', 'PLYUSDT', 'POKTUSDT', 'POLUSDT', 'PORT3USDT', 'PPTUSDT',
                    'PRIMALUSDT', 'PRIMEUSDT', 'PSGUSDT', 'PSPUSDT', 'PSTAKEUSDT', 'PTUUSDT', 'PUMLXUSDT', 'PYTHUSDT', 'PYUSDUSDT',
                    'QMALLUSDT', 'QNTUSDT', 'QTUMUSDT', 'RACAUSDT', 'RAINUSDT', 'RATSUSDT', 'RDNTUSDT', 'REALUSDT', 'RENUSDT',
                    'RLTMUSDT', 'RNDRUSDT', 'RONDUSDT', 'ROOTUSDT', 'ROSEUSDT', 'RPKUSDT', 'RPLUSDT', 'RSS3USDT', 'RUNEUSDT',
                    'RVNUSDT', 'SAILUSDT', 'SALDUSDT', 'SAND2LUSDT', 'SAND2SUSDT', 'SANDUSDT', 'SAROSUSDT', 'SATSUSDT', 'SCRTUSDT',
-                   'SCUSDT', 'SDUSDT', 'SEILORUSDT', 'SEIUSDT', 'SEORUSDT', 'SFUNDUSDT', 'SHIBUSDT', 'SHILLUSDT', 'SHRAPUSDT',
+                   'SCUSDT', 'SEILORUSDT', 'SEIUSDT', 'SEORUSDT', 'SFUNDUSDT', 'SHIBUSDT', 'SHILLUSDT', 'SHRAPUSDT',
                    'SIDUSUSDT', 'SISUSDT', 'SLGUSDT', 'SLPUSDT', 'SNXUSDT', 'SOLOUSDT', 'SOLUSDT', 'SONUSDT', 'SOSUSDT',
                    'SPARTAUSDT', 'SPELLUSDT', 'SQRUSDT', 'SRMUSDT', 'SSVUSDT', 'STATUSDT', 'STETHUSDT', 'STGUSDT', 'STRMUSDT',
                    'STXUSDT', 'SUIAUSDT', 'SUIUSDT', 'SUNUSDT', 'SUSHIUSDT', 'SWEATUSDT', 'SYNRUSDT', 'TAMAUSDT', 'TAPUSDT',
                    'TAVAUSDT', 'TELUSDT', 'TENETUSDT', 'THETAUSDT', 'THNUSDT', 'TIAUSDT', 'TIMEUSDT', 'TOKENUSDT', 'TOMIUSDT',
-                   'TOMSUSDT', 'TONUSDT', 'TRCUSDT', 'TRIBEUSDT', 'TRVLUSDT', 'TRXUSDT', 'TURBOSUSDT', 'TUSDT', 'TUSDUSDT',
+                   'TOMSUSDT', 'TONUSDT', 'TRCUSDT', 'TRIBEUSDT', 'TRVLUSDT', 'TRXUSDT', 'TURBOSUSDT',
                    'TVKUSDT', 'TWTUSDT', 'UMAUSDT', 'UNIUSDT', 'USDCUSDT', 'USDDUSDT', 'USDYUSDT', 'USTCUSDT', 'VANRYUSDT',
                    'VEGAUSDT', 'VELAUSDT', 'VELOUSDT', 'VEXTUSDT', 'VICUSDT', 'VINUUSDT', 'VPADUSDT', 'VPRUSDT', 'VRAUSDT',
                    'VRTXUSDT', 'VVUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBTCUSDT', 'WEMIXUSDT', 'WLDUSDT', 'WLKNUSDT', 'WOOUSDT',
@@ -65,28 +64,34 @@ chats = {}
 for dialog in client.iter_dialogs():
     chats[dialog.id] = dialog.name
 
-@client.on(events.NewMessage(chats=["CAZADOR CRYPTO", "Плечо Профессора", "Maloletoff | Crypto-Angel", "Crypto▫️Man💎", "Trade Community"]))
+@client.on(events.NewMessage(chats=["BIBAK222", "CAZADOR CRYPTO", "Плечо Профессора", "Maloletoff | Crypto-Angel", "Crypto▫️Man💎", "Trade Community"]))
 async def normal_handler(event):
+    '''получение сообщения'''
     info = event.message.to_dict()
-    print(info)
-    mes = info['message'].split()
+    mes = info['message']
+    '''фиксация текущего времени'''
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     try:
+        '''получение наименования чата'''
         ch = chats[event.chat_id]
     except Exception as e:
         telebot.TeleBot(telega_token).send_message(chat_id, f"ОШИБКА - {e}\n"
                                                             f"Не смог определить группу")
     try:
-        true_mes = mes[0]+mes[1]+mes[2]+mes[3]+mes[4]+mes[5]+mes[6]
-        x = [i for i in trade_pairs_bybit if search(i[:-4], true_mes)]
-        print(true_mes)
-        result = sorted(x, key=lambda x: -len(x))[0]
-        telebot.TeleBot(telega_token).send_message(chat_id, f"Закупаем - {result}\n"
-                                                            f"Группа - {ch}\n"
-                                                            f"Время: {current_time}")
+        '''берем куски сообщения для поиска крипты и дейсвтий c ней'''
+        x = [i for i in trade_pairs_bybit if search(i[:-4], mes)]
+        y = [i for i in ["LONG", "SHORT"] if search(i, mes)]
+
+        if len(x) > 0 and len(y) > 0:
+            result = sorted(x, key=lambda x: -len(x))[0]
+            telebot.TeleBot(telega_token).send_message(chat_id, f"Закупаем - {result}\n"
+                                                                f"Вид торговли - {y[0]}\n"
+                                                                f"Группа - {ch}\n"
+                                                                f"Время: {current_time}")
     except Exception as e:
-        telebot.TeleBot(telega_token).send_message(chat_id, f"ОШИБКА - {e}\n"
+        telebot.TeleBot(telega_token).send_message(chat_id, f"MESSAGE - {mes}\n"
+                                                            f"ОШИБКА - {e}\n"
                                                             f"Группа - {ch}\n"
                                                             f"Время: {current_time}")
 

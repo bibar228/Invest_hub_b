@@ -1,4 +1,5 @@
 #from pybit.unified_trading import HTTP
+import requests
 
 from Invest_hub_b.scrt.keys import api_key, api_secret
 import pandas as pd
@@ -108,4 +109,9 @@ trade_pairs_bybit = ['1INCHUSDT', '1SOLUSDT', '3PUSDT', '5IREUSDT', 'AAVEUSDT', 
 # a = requests.get("https://api.bybit.com/spot/v3/public/symbols")
 # df = pd.DataFrame(a.json()["result"]["list"])
 # trade_pairs_bybit = sorted([i for i in df["name"].values if i[-4:] == "USDT"])
-# print(trade_pairs_bybit)
+# for i in trade_pairs_bybit:
+#     if i == "MATICUSDT":
+#         print("yes")
+
+a = requests.get('https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol=MATICUSDT')
+print(a.json()["result"]["price"])
