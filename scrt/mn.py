@@ -1,8 +1,12 @@
+import asyncio
+
+import requests
 from telethon import TelegramClient, events, sync
 from keys import api_id, api_hash
 from re import search
 import telebot
 from datetime import datetime
+import psycopg2
 
 trade_pairs_bybit = ['1INCHUSDT', '1SOLUSDT', '3PUSDT', '5IREUSDT', 'AAVEUSDT', 'ACAUSDT', 'ACHUSDT', 'ACMUSDT', 'ACSUSDT',
                    'ADA2LUSDT', 'ADA2SUSDT', 'ADAUSDT', 'AFCUSDT', 'AFGUSDT', 'AGIUSDT', 'AGIXUSDT', 'AGLAUSDT', 'AGLDUSDT',
@@ -64,14 +68,14 @@ chats = {}
 for dialog in client.iter_dialogs():
     chats[dialog.id] = dialog.name
 
-@client.on(events.NewMessage(chats=["BIBAK222", "CAZADOR CRYPTO", "Плечо Профессора", "Maloletoff | Crypto-Angel", "Crypto▫️Man💎", "Trade Community"]))
+@client.on(events.NewMessage(chats=["Front & Back guys", "Турнички и Братишки", "CAZADOR CRYPTO", "Плечо Профессора", "Maloletoff | Crypto-Angel", "Crypto▫️Man💎", "Trade Community"]))
 async def normal_handler(event):
     '''получение сообщения'''
     info = event.message.to_dict()
     mes = info['message']
     '''фиксация текущего времени'''
     now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
+    current_time = now.strftime("%Y-%m-%d %H:%M:%S")
     try:
         '''получение наименования чата'''
         ch = chats[event.chat_id]
@@ -89,6 +93,116 @@ async def normal_handler(event):
                                                                 f"Вид торговли - {y[0]}\n"
                                                                 f"Группа - {ch}\n"
                                                                 f"Время: {current_time}")
+            '''Получаем цену'''
+            a = requests.get(f'https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol={result}')
+            price = a.json()["result"]["price"]
+            values = (current_time, result, price)
+            try:
+                connection = psycopg2.connect(host='127.0.0.1', port=5432, user='mag_user', password='warlight123',
+                                             database='invest')
+                try:
+                    with connection.cursor() as cursor:
+                        insert_query = "INSERT INTO analize_orders (time, name_cript, price_buy)" \
+                                       "VALUES (%s, %s, %s) RETURNING id;"
+                        cursor.execute(insert_query, (values))
+                        id_change = cursor.fetchone()[0]
+                        connection.commit()
+                finally:
+                    connection.close()
+
+                '''Ждем час и записываем цену в базу'''
+                await asyncio.sleep(3600)
+                a = requests.get(f'https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol={result}')
+                price = a.json()["result"]["price"]
+                try:
+                    connection = psycopg2.connect(host='127.0.0.1', port=5432, user='mag_user', password='warlight123',
+                                                  database='invest')
+                    try:
+                        with connection.cursor() as cursor:
+                            insert_query = f"UPDATE analize_orders set price_in_1hour = {price} where id = {id_change}"
+                            cursor.execute(insert_query)
+                            connection.commit()
+
+                    finally:
+                        connection.close()
+                except Exception as e:
+                    telebot.TeleBot(telega_token).send_message(chat_id, f"SQL ERROR: {e}\n")
+
+                '''Ждем 2 часа и записываем цену в базу'''
+                await asyncio.sleep(7200)
+                a = requests.get(f'https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol={result}')
+                price = a.json()["result"]["price"]
+                try:
+                    connection = psycopg2.connect(host='127.0.0.1', port=5432, user='mag_user', password='warlight123',
+                                                  database='invest')
+                    try:
+                        with connection.cursor() as cursor:
+                            insert_query = f"UPDATE analize_orders set price_in_2hour = {price} where id = {id_change}"
+                            cursor.execute(insert_query)
+                            connection.commit()
+
+                    finally:
+                        connection.close()
+                except Exception as e:
+                    telebot.TeleBot(telega_token).send_message(chat_id, f"SQL ERROR: {e}\n")
+
+                '''Ждем 3 часа и записываем цену в базу'''
+                await asyncio.sleep(10800)
+                a = requests.get(f'https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol={result}')
+                price = a.json()["result"]["price"]
+                try:
+                    connection = psycopg2.connect(host='127.0.0.1', port=5432, user='mag_user', password='warlight123',
+                                                  database='invest')
+                    try:
+                        with connection.cursor() as cursor:
+                            insert_query = f"UPDATE analize_orders set price_in_3hour = {price} where id = {id_change}"
+                            cursor.execute(insert_query)
+                            connection.commit()
+
+                    finally:
+                        connection.close()
+                except Exception as e:
+                    telebot.TeleBot(telega_token).send_message(chat_id, f"SQL ERROR: {e}\n")
+
+                '''Ждем 5 часов и записываем цену в базу'''
+                await asyncio.sleep(3600)
+                a = requests.get(f'https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol={result}')
+                price = a.json()["result"]["price"]
+                try:
+                    connection = psycopg2.connect(host='127.0.0.1', port=5432, user='mag_user', password='warlight123',
+                                                  database='invest')
+                    try:
+                        with connection.cursor() as cursor:
+                            insert_query = f"UPDATE analize_orders set price_in_5hour = {price} where id = {id_change}"
+                            cursor.execute(insert_query)
+                            connection.commit()
+
+                    finally:
+                        connection.close()
+                except Exception as e:
+                    telebot.TeleBot(telega_token).send_message(chat_id, f"SQL ERROR: {e}\n")
+
+                '''Ждем 24 часа и записываем цену в базу'''
+                await asyncio.sleep(86400)
+                a = requests.get(f'https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol={result}')
+                price = a.json()["result"]["price"]
+                try:
+                    connection = psycopg2.connect(host='127.0.0.1', port=5432, user='mag_user', password='warlight123',
+                                                  database='invest')
+                    try:
+                        with connection.cursor() as cursor:
+                            insert_query = f"UPDATE analize_orders set price_in_24hour = {price} where id = {id_change}"
+                            cursor.execute(insert_query)
+                            connection.commit()
+
+                    finally:
+                        connection.close()
+                except Exception as e:
+                    telebot.TeleBot(telega_token).send_message(chat_id, f"SQL ERROR: {e}\n")
+
+            except Exception as e:
+                telebot.TeleBot(telega_token).send_message(chat_id, f"SQL ERROR: {e}\n")
+
     except Exception as e:
         telebot.TeleBot(telega_token).send_message(chat_id, f"MESSAGE - {mes}\n"
                                                             f"ОШИБКА - {e}\n"
