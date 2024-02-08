@@ -3,8 +3,10 @@ from django.db import models
 # Create your models here.
 class Orders(models.Model):
     time = models.CharField(max_length=30)
+    chat_title = models.CharField(verbose_name="Название чата", max_length=100, null=True)
     name_cript = models.CharField(verbose_name="Название крипты", max_length=15)
     price_buy = models.FloatField(verbose_name="Цена покупки")
+    description = models.CharField(verbose_name="Действие", max_length=15, null=True)
     price_in_1hour = models.FloatField(verbose_name="Цена за час", null=True)
     price_in_2hour = models.FloatField(verbose_name="Цена за 2 часа", null=True)
     price_in_3hour = models.FloatField(verbose_name="Цена за 3 часа", null=True)

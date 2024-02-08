@@ -16,7 +16,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+from users.views import RegistrUserView, LoginView, register_confirm, RegConfirmRepeat
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Django Invest Crypto Profit IMBA 3000",
+        default_version="v2",
+        description="Description",
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
+    path('auth/registr/', RegistrUserView.as_view(), name='registr'),
+    path("auth/log/", LoginView.as_view()),
+    path("register_confirm/<token>/", register_confirm, name="register_confirm"),
+    path("confirm_repeat/", RegConfirmRepeat.as_view())
 ]

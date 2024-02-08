@@ -9,31 +9,30 @@ from datetime import datetime
 import psycopg2
 
 trade_pairs_bybit = ['1INCHUSDT', '1SOLUSDT', '3PUSDT', '5IREUSDT', 'AAVEUSDT', 'ACAUSDT', 'ACHUSDT', 'ACMUSDT', 'ACSUSDT',
-                   'ADA2LUSDT', 'ADA2SUSDT', 'ADAUSDT', 'AFCUSDT', 'AFGUSDT', 'AGIUSDT', 'AGIXUSDT', 'AGLAUSDT', 'AGLDUSDT',
-                   'AIOZUSDT', 'AKIUSDT', 'ALGOUSDT', 'ANKRUSDT', 'APE2LUSDT', 'APE2SUSDT', 'APEUSDT', 'APEXUSDT', 'APPUSDT',
-                   'APTUSDT', 'ARBUSDT', 'ARKMUSDT', 'ARTYUSDT', 'ARUSDT', 'ATOM2LUSDT', 'ATOM2SUSDT', 'ATOMUSDT', 'AVAUSDT',
-                   'AVAX2LUSDT', 'AVAX2SUSDT', 'AVAXUSDT', 'AXLUSDT', 'AXSUSDT', 'AZYUSDT', 'BABYDOGEUSDT', 'BARUSDT', 'BATUSDT',
+                   'ADAUSDT', 'AFCUSDT', 'AFGUSDT', 'AGIUSDT', 'AGIXUSDT', 'AGLAUSDT', 'AGLDUSDT',
+                   'AIOZUSDT', 'AKIUSDT', 'ALGOUSDT', 'ANKRUSDT', 'APEUSDT', 'APEXUSDT', 'APPUSDT',
+                   'APTUSDT', 'ARBUSDT', 'ARKMUSDT', 'ARTYUSDT', 'ARUSDT', 'ATOMUSDT', 'AVAUSDT',
+                   'AVAXUSDT', 'AXLUSDT', 'AXSUSDT', 'AZYUSDT', 'BABYDOGEUSDT', 'BARUSDT', 'BATUSDT',
                    'BCHUSDT', 'BEAMUSDT', 'BELUSDT', 'BICOUSDT', 'BLURUSDT', 'BNBUSDT', 'BNTUSDT', 'BOBAUSDT', 'BOBUSDT', 'BONKUSDT',
-                   'BTC3LUSDT', 'BTC3SUSDT', 'BTCUSDT', 'BTGUSDT', 'BTTUSDT', 'C98USDT', 'CAKEUSDT', 'CANDYUSDT', 'CAPOUSDT',
+                   'BTGUSDT', 'BTTUSDT', 'C98USDT', 'CAKEUSDT', 'CANDYUSDT', 'CAPOUSDT',
                    'CAPSUSDT', 'CATUSDT', 'CBKUSDT', 'CBXUSDT', 'CELOUSDT', 'CELUSDT', 'CGPTUSDT', 'CHRPUSDT', 'CHZUSDT', 'CITYUSDT',
                    'CMPUSDT', 'COMPUSDT', 'COMUSDT', 'COQUSDT', 'COREUSDT', 'COTUSDT', 'COUSDT', 'CRDSUSDT', 'CRVUSDT', 'CTCUSDT',
                    'CTTUSDT', 'CULTUSDT', 'CUSDUSDT', 'CWARUSDT', 'CYBERUSDT', 'DAIUSDT', 'DCRUSDT', 'DEFIUSDT', 'DEFYUSDT', 'DEVTUSDT',
-                   'DFIUSDT', 'DGBUSDT', 'DICEUSDT', 'DLCUSDT', 'DMAILUSDT', 'DOGE2LUSDT', 'DOGE2SUSDT', 'DOGEUSDT', 'DOMEUSDT',
-                   'DOT3LUSDT', 'DOT3SUSDT', 'DOTUSDT', 'DPXUSDT', 'DSRUNUSDT', 'DUELUSDT', 'DYDXUSDT', 'DZOOUSDT', 'ECOXUSDT',
+                   'DFIUSDT', 'DGBUSDT', 'DICEUSDT', 'DLCUSDT', 'DMAILUSDT', 'DOGEUSDT', 'DOMEUSDT',
+                   'DOTUSDT', 'DPXUSDT', 'DSRUNUSDT', 'DUELUSDT', 'DYDXUSDT', 'DZOOUSDT', 'ECOXUSDT',
                    'EGLDUSDT', 'EGOUSDT', 'ELDAUSDT', 'ELTUSDT', 'ENJUSDT', 'ENSUSDT', 'EOS2LUSDT', 'EOS2SUSDT', 'EOSUSDT', 'ERTHAUSDT',
-                   'ETC2LUSDT', 'ETC2SUSDT', 'ETCUSDT', 'ETH3LUSDT', 'ETH3SUSDT', 'ETHUSDT', 'ETHWUSDT', 'EVERUSDT', 'FAMEUSDT',
+                   'ETC2LUSDT', 'ETCUSDT', 'EVERUSDT', 'FAMEUSDT',
                    'FARUSDT', 'FBUSDT', 'FETUSDT', 'FIDAUSDT', 'FILUSDT', 'FIREUSDT', 'FITFIUSDT', 'FLIPUSDT', 'FLOKIUSDT', 'FLOWUSDT',
-                   'FLRUSDT', 'FMBUSDT', 'FMCUSDT', 'FONUSDT', 'FORTUSDT', 'FTM2LUSDT', 'FTM2SUSDT', 'FTMUSDT', 'FTTUSDT', 'FXSUSDT',
-                   'GALAUSDT', 'GALFTUSDT', 'GALUSDT', 'GCAKEUSDT', 'GENEUSDT', 'GGMUSDT', 'GGUSDT', 'GLMRUSDT', 'GMT2LUSDT',
-                   'GMT2SUSDT', 'GMTUSDT', 'GMUSDT', 'GMXUSDT', 'GNSUSDT', 'GODSUSDT', 'GPTUSDT', 'GRAPEUSDT', 'GRTUSDT',
+                   'FLRUSDT', 'FMBUSDT', 'FMCUSDT', 'FONUSDT', 'FORTUSDT', 'FTMUSDT', 'FTTUSDT', 'FXSUSDT',
+                   'GALAUSDT', 'GALFTUSDT', 'GALUSDT', 'GCAKEUSDT', 'GENEUSDT', 'GGMUSDT', 'GGUSDT', 'GLMRUSDT', 'GMTUSDT', 'GMUSDT', 'GMXUSDT', 'GNSUSDT', 'GODSUSDT', 'GPTUSDT', 'GRAPEUSDT', 'GRTUSDT',
                    'GSTSUSDT', 'GSTUSDT', 'GSWIFTUSDT', 'GTAIUSDT', 'HBARUSDT', 'HEROUSDT', 'HFTUSDT', 'HNTUSDT', 'HONUSDT',
                    'HOOKUSDT', 'HOTUSDT', 'HVHUSDT', 'ICPUSDT', 'ICXUSDT', 'IDUSDT', 'IMXUSDT', 'INJUSDT', 'INSPUSDT',
                    'INTERUSDT', 'IRLUSDT', 'IZIUSDT', 'JASMYUSDT', 'JEFFUSDT', 'JSTUSDT', 'JTOUSDT', 'JUPUSDT', 'JUVUSDT',
                    'KARATEUSDT', 'KASTAUSDT', 'KASUSDT', 'KAVAUSDT', 'KCALUSDT', 'KCSUSDT', 'KDAUSDT', 'KLAYUSDT', 'KMONUSDT',
                    'KOKUSDT', 'KONUSDT', 'KRLUSDT', 'KSMUSDT', 'KUBUSDT', 'KUNCIUSDT', 'LADYSUSDT', 'LDOUSDT', 'LEVERUSDT',
-                   'LFWUSDT', 'LGXUSDT', 'LINGUSDT', 'LINK2LUSDT', 'LINK2SUSDT', 'LINKUSDT', 'LISUSDT', 'LMWRUSDT', 'LOOKSUSDT',
-                   'LRCUSDT', 'LTC2LUSDT', 'LTC2SUSDT', 'LTCUSDT', 'LUNAUSDT', 'LUNCUSDT', 'MAGICUSDT', 'MANAUSDT', 'MANTAUSDT',
-                   'MASKUSDT', 'MATIC2LUSDT', 'MATIC2SUSDT', 'MATICUSDT', 'MBOXUSDT', 'MBSUSDT', 'MBXUSDT', 'MCRTUSDT', 'MCTUSDT',
+                   'LFWUSDT', 'LGXUSDT', 'LINGUSDT', 'LINKUSDT', 'LISUSDT', 'LMWRUSDT', 'LOOKSUSDT',
+                   'LRCUSDT', 'LTCUSDT', 'LUNAUSDT', 'LUNCUSDT', 'MAGICUSDT', 'MANAUSDT', 'MANTAUSDT',
+                   'MASKUSDT', 'MATICUSDT', 'MBOXUSDT', 'MBSUSDT', 'MBXUSDT', 'MCRTUSDT', 'MCTUSDT',
                    'MDAOUSDT', 'MEEUSDT', 'MELOSUSDT', 'MEMEUSDT', 'METHUSDT', 'MIBRUSDT', 'MINAUSDT', 'MIXUSDT', 'MKRUSDT', 'MLKUSDT',
                    'MMCUSDT', 'MNTUSDT', 'MNZUSDT', 'MOVEZUSDT', 'MOVRUSDT', 'MPLXUSDT', 'MTCUSDT', 'MTKUSDT', 'MUSDUSDT', 'MVLUSDT',
                    'MVUSDT', 'MXMUSDT', 'MXUSDT', 'MYRIAUSDT', 'MYROUSDT', 'NEARUSDT', 'NEONUSDT', 'NESSUSDT', 'NEXOUSDT', 'NEXTUSDT',
@@ -43,7 +42,7 @@ trade_pairs_bybit = ['1INCHUSDT', '1SOLUSDT', '3PUSDT', '5IREUSDT', 'AAVEUSDT', 
                    'PRIMALUSDT', 'PRIMEUSDT', 'PSGUSDT', 'PSPUSDT', 'PSTAKEUSDT', 'PTUUSDT', 'PUMLXUSDT', 'PYTHUSDT', 'PYUSDUSDT',
                    'QMALLUSDT', 'QNTUSDT', 'QTUMUSDT', 'RACAUSDT', 'RAINUSDT', 'RATSUSDT', 'RDNTUSDT', 'REALUSDT', 'RENUSDT',
                    'RLTMUSDT', 'RNDRUSDT', 'RONDUSDT', 'ROOTUSDT', 'ROSEUSDT', 'RPKUSDT', 'RPLUSDT', 'RSS3USDT', 'RUNEUSDT',
-                   'RVNUSDT', 'SAILUSDT', 'SALDUSDT', 'SAND2LUSDT', 'SAND2SUSDT', 'SANDUSDT', 'SAROSUSDT', 'SATSUSDT', 'SCRTUSDT',
+                   'RVNUSDT', 'SAILUSDT', 'SALDUSDT', 'SANDUSDT', 'SAROSUSDT', 'SATSUSDT', 'SCRTUSDT',
                    'SCUSDT', 'SEILORUSDT', 'SEIUSDT', 'SEORUSDT', 'SFUNDUSDT', 'SHIBUSDT', 'SHILLUSDT', 'SHRAPUSDT',
                    'SIDUSUSDT', 'SISUSDT', 'SLGUSDT', 'SLPUSDT', 'SNXUSDT', 'SOLOUSDT', 'SOLUSDT', 'SONUSDT', 'SOSUSDT',
                    'SPARTAUSDT', 'SPELLUSDT', 'SQRUSDT', 'SRMUSDT', 'SSVUSDT', 'STATUSDT', 'STETHUSDT', 'STGUSDT', 'STRMUSDT',
@@ -78,7 +77,7 @@ async def normal_handler(event):
     current_time = now.strftime("%Y-%m-%d %H:%M:%S")
     try:
         '''получение наименования чата'''
-        ch = chats[event.chat_id]
+        chat = chats[event.chat_id]
     except Exception as e:
         telebot.TeleBot(telega_token).send_message(chat_id, f"ОШИБКА - {e}\n"
                                                             f"Не смог определить группу")
@@ -91,19 +90,19 @@ async def normal_handler(event):
             result = sorted(x, key=lambda x: -len(x))[0]
             telebot.TeleBot(telega_token).send_message(chat_id, f"Закупаем - {result}\n"
                                                                 f"Вид торговли - {y[0]}\n"
-                                                                f"Группа - {ch}\n"
+                                                                f"Группа - {chat}\n"
                                                                 f"Время: {current_time}")
             '''Получаем цену'''
             a = requests.get(f'https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol={result}')
             price = a.json()["result"]["price"]
-            values = (current_time, result, price)
+            values = (current_time, chat, result, price)
             try:
                 connection = psycopg2.connect(host='127.0.0.1', port=5432, user='mag_user', password='warlight123',
                                              database='invest')
                 try:
                     with connection.cursor() as cursor:
-                        insert_query = "INSERT INTO analize_orders (time, name_cript, price_buy)" \
-                                       "VALUES (%s, %s, %s) RETURNING id;"
+                        insert_query = "INSERT INTO analize_orders (time, chat_title, name_cript, price_buy)" \
+                                       "VALUES (%s, %s, %, %s) RETURNING id;"
                         cursor.execute(insert_query, (values))
                         id_change = cursor.fetchone()[0]
                         connection.commit()
@@ -129,7 +128,7 @@ async def normal_handler(event):
                     telebot.TeleBot(telega_token).send_message(chat_id, f"SQL ERROR: {e}\n")
 
                 '''Ждем 2 часа и записываем цену в базу'''
-                await asyncio.sleep(7200)
+                await asyncio.sleep(3600)
                 a = requests.get(f'https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol={result}')
                 price = a.json()["result"]["price"]
                 try:
@@ -147,7 +146,7 @@ async def normal_handler(event):
                     telebot.TeleBot(telega_token).send_message(chat_id, f"SQL ERROR: {e}\n")
 
                 '''Ждем 3 часа и записываем цену в базу'''
-                await asyncio.sleep(10800)
+                await asyncio.sleep(3600)
                 a = requests.get(f'https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol={result}')
                 price = a.json()["result"]["price"]
                 try:
@@ -165,7 +164,7 @@ async def normal_handler(event):
                     telebot.TeleBot(telega_token).send_message(chat_id, f"SQL ERROR: {e}\n")
 
                 '''Ждем 5 часов и записываем цену в базу'''
-                await asyncio.sleep(3600)
+                await asyncio.sleep(7200)
                 a = requests.get(f'https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol={result}')
                 price = a.json()["result"]["price"]
                 try:
@@ -183,7 +182,7 @@ async def normal_handler(event):
                     telebot.TeleBot(telega_token).send_message(chat_id, f"SQL ERROR: {e}\n")
 
                 '''Ждем 24 часа и записываем цену в базу'''
-                await asyncio.sleep(86400)
+                await asyncio.sleep(68400)
                 a = requests.get(f'https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol={result}')
                 price = a.json()["result"]["price"]
                 try:
@@ -206,7 +205,7 @@ async def normal_handler(event):
     except Exception as e:
         telebot.TeleBot(telega_token).send_message(chat_id, f"MESSAGE - {mes}\n"
                                                             f"ОШИБКА - {e}\n"
-                                                            f"Группа - {ch}\n"
+                                                            f"Группа - {chat}\n"
                                                             f"Время: {current_time}")
 
 
