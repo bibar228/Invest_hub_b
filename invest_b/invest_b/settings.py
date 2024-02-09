@@ -79,14 +79,26 @@ WSGI_APPLICATION = 'invest_b.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'invest',
-        'USER': 'mag_user',
+        'USER': 'invest_user',
         'PASSWORD': 'warlight123',
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT': '3306',
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'invest',
+#         'USER': 'mag_user',
+#         'PASSWORD': 'warlight123',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation
