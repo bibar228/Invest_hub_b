@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-+b@%u6xb!v3%kt1(5y4vgyz9c@==!wp700gqq=t0*xjs+=@=d!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['invest228.pythonanywhere.com']
 
 
 # Application definition
@@ -77,28 +77,40 @@ WSGI_APPLICATION = 'invest_b.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'invest',
+#         'USER': 'invest_user',
+#         'PASSWORD': 'warlight123',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'invest228$default',
+#         'USER': 'invest228',
+#         'PASSWORD': 'warlight123',
+#         'HOST': 'invest228.mysql.pythonanywhere-services.com'
+#     }
+# }
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'invest',
-        'USER': 'invest_user',
+        'USER': 'mag_user',
         'PASSWORD': 'warlight123',
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': '5432',
     }
 }
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'invest',
-#         'USER': 'mag_user',
-#         'PASSWORD': 'warlight123',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
 
 
 # Password validation
@@ -154,6 +166,13 @@ CACHES = {
         "LOCATION": "redis://127.0.0.1:6379/1",
     }
 }
+
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://redis-11954.c304.europe-west1-2.gce.cloud.redislabs.com",
+#     }
+# }
 
 SOAQAZ_USER_CONFIRMATION_KEY = "user_confirmation_{token}"
 SOAQAZ_USER_CONFIRMATION_TIMEOUT = 300

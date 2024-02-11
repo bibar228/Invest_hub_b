@@ -67,7 +67,7 @@ chats = {}
 for dialog in client.iter_dialogs():
     chats[dialog.id] = dialog.name
 
-@client.on(events.NewMessage(chats=["BIBAK222", "Front & Back guys", "Турнички и Братишки", "CAZADOR CRYPTO", "Плечо Профессора", "Maloletoff | Crypto-Angel", "Crypto▫️Man💎", "Trade Community"]))
+@client.on(events.NewMessage(chats=["Front & Back guys", "Турнички и Братишки", "CAZADOR CRYPTO", "Плечо Профессора", "Maloletoff | Crypto-Angel", "Crypto▫️Man💎", "Trade Community"]))
 async def normal_handler(event):
     '''получение сообщения'''
     info = event.message.to_dict()
@@ -97,15 +97,14 @@ async def normal_handler(event):
             price = a.json()["result"]["price"]
             values = (current_time, chat, result, price)
             try:
-                connection = pymysql.connect(host='127.0.0.1', port=3306, user='invest_user', password='warlight123',
-                                             database='invest',
-                                             cursorclass=pymysql.cursors.DictCursor)
+                connection = psycopg2.connect(host='127.0.0.1', port=5432, user='mag_user', password='warlight123',
+                                              database='invest')
                 try:
                     with connection.cursor() as cursor:
-                        insert_query = "INSERT INTO `analize_orders` (time, chat_title, name_cript, price_buy)" \
-                                       "VALUES (%s, %s, %s, %s)"
+                        insert_query = "INSERT INTO analize_orders (time, chat_title, name_cript, price_buy)" \
+                                       "VALUES (%s, %s, %, %s) RETURNING id;"
                         cursor.execute(insert_query, (values))
-                        id_change = cursor.lastrowid
+                        id_change = cursor.fetchone()[0]
                         connection.commit()
                 finally:
                     connection.close()
@@ -115,12 +114,11 @@ async def normal_handler(event):
                 a = requests.get(f'https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol={result}')
                 price = a.json()["result"]["price"]
                 try:
-                    connection = pymysql.connect(host='127.0.0.1', port=3306, user='invest_user', password='warlight123',
-                                             database='invest',
-                                             cursorclass=pymysql.cursors.DictCursor)
+                    connection = psycopg2.connect(host='127.0.0.1', port=5432, user='mag_user', password='warlight123',
+                                                  database='invest')
                     try:
                         with connection.cursor() as cursor:
-                            insert_query = f"UPDATE `analize_orders` set price_in_1hour = {price} where id = {id_change}"
+                            insert_query = f"UPDATE analize_orders set price_in_1hour = {price} where id = {id_change}"
                             cursor.execute(insert_query)
                             connection.commit()
 
@@ -134,12 +132,11 @@ async def normal_handler(event):
                 a = requests.get(f'https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol={result}')
                 price = a.json()["result"]["price"]
                 try:
-                    connection = pymysql.connect(host='127.0.0.1', port=3306, user='invest_user', password='warlight123',
-                                             database='invest',
-                                             cursorclass=pymysql.cursors.DictCursor)
+                    connection = psycopg2.connect(host='127.0.0.1', port=5432, user='mag_user', password='warlight123',
+                                                  database='invest')
                     try:
                         with connection.cursor() as cursor:
-                            insert_query = f"UPDATE `analize_orders` set price_in_2hour = {price} where id = {id_change}"
+                            insert_query = f"UPDATE analize_orders set price_in_2hour = {price} where id = {id_change}"
                             cursor.execute(insert_query)
                             connection.commit()
 
@@ -153,12 +150,11 @@ async def normal_handler(event):
                 a = requests.get(f'https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol={result}')
                 price = a.json()["result"]["price"]
                 try:
-                    connection = pymysql.connect(host='127.0.0.1', port=3306, user='invest_user', password='warlight123',
-                                             database='invest',
-                                             cursorclass=pymysql.cursors.DictCursor)
+                    connection = psycopg2.connect(host='127.0.0.1', port=5432, user='mag_user', password='warlight123',
+                                                  database='invest')
                     try:
                         with connection.cursor() as cursor:
-                            insert_query = f"UPDATE `analize_orders` set price_in_3hour = {price} where id = {id_change}"
+                            insert_query = f"UPDATE analize_orders set price_in_3hour = {price} where id = {id_change}"
                             cursor.execute(insert_query)
                             connection.commit()
 
@@ -172,12 +168,11 @@ async def normal_handler(event):
                 a = requests.get(f'https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol={result}')
                 price = a.json()["result"]["price"]
                 try:
-                    connection = pymysql.connect(host='127.0.0.1', port=3306, user='invest_user', password='warlight123',
-                                             database='invest',
-                                             cursorclass=pymysql.cursors.DictCursor)
+                    connection = psycopg2.connect(host='127.0.0.1', port=5432, user='mag_user', password='warlight123',
+                                                  database='invest')
                     try:
                         with connection.cursor() as cursor:
-                            insert_query = f"UPDATE `analize_orders` set price_in_5hour = {price} where id = {id_change}"
+                            insert_query = f"UPDATE analize_orders set price_in_5hour = {price} where id = {id_change}"
                             cursor.execute(insert_query)
                             connection.commit()
 
@@ -191,12 +186,11 @@ async def normal_handler(event):
                 a = requests.get(f'https://api.bybit.com/spot/v3/public/quote/ticker/price?symbol={result}')
                 price = a.json()["result"]["price"]
                 try:
-                    connection = pymysql.connect(host='127.0.0.1', port=3306, user='invest_user', password='warlight123',
-                                             database='invest',
-                                             cursorclass=pymysql.cursors.DictCursor)
+                    connection = psycopg2.connect(host='127.0.0.1', port=5432, user='mag_user', password='warlight123',
+                                                  database='invest')
                     try:
                         with connection.cursor() as cursor:
-                            insert_query = f"UPDATE `analize_orders` set price_in_24hour = {price} where id = {id_change}"
+                            insert_query = f"UPDATE analize_orders set price_in_24hour = {price} where id = {id_change}"
                             cursor.execute(insert_query)
                             connection.commit()
 
