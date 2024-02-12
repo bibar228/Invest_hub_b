@@ -34,8 +34,8 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
-    path('auth/registr/', RegistrUserView.as_view(), name='registr'),
-    path("auth/log/", LoginView.as_view()),
-    path("register_confirm/<token>/", register_confirm, name="register_confirm"),
-    path("confirm_repeat/", RegConfirmRepeat.as_view())
+    path('api/auth/registr/', RegistrUserView.as_view(), name='registr'),
+    path("api/auth/log/", LoginView.as_view()),
+    path("api/register_confirm/<token>/", register_confirm, name="register_confirm"),
+    path("api/confirm_repeat/", RegConfirmRepeat.as_view())
 ]
