@@ -2,11 +2,17 @@ import asyncio
 import pymysql
 import requests
 from telethon import TelegramClient, events, sync
-from keys import api_id, api_hash
+#from keys import api_id, api_hash
 from re import search
 import telebot
 from datetime import datetime
 import psycopg2
+
+api_id = 24512328
+api_hash = "cc5f63b55d33f6a97b1f60336201ff22"
+
+api_key = "w2zvYwzp3mBbOaWmPp"
+api_secret = "7qyF3nAAIDVxymR4BeUgpSu5AKvH7mOkKtlv"
 
 trade_pairs_bybit = ['1INCHUSDT', '1SOLUSDT', '3PUSDT', '5IREUSDT', 'AAVEUSDT', 'ACAUSDT', 'ACHUSDT', 'ACMUSDT', 'ACSUSDT',
                    'ADAUSDT', 'AFCUSDT', 'AFGUSDT', 'AGIUSDT', 'AGIXUSDT', 'AGLAUSDT', 'AGLDUSDT',
