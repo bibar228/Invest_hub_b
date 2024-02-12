@@ -43,14 +43,7 @@ class RegistrUserView(CreateAPIView):
     def post(self, request, *args, **kwargs):
         # Добавляем UserRegistrSerializer
         serializer = UserRegistrSerializer(data=request.data)
-        # Создаём список data
-        data = {}
-        # Проверка данных на валидность
         if serializer.is_valid():
-            # Сохраняем нового пользователя
-            # Добавляем в список значение ответа True
-            data['response'] = True
-            # Возвращаем что всё в порядке
             token = uuid.uuid4().hex
             redis_key = settings.SOAQAZ_USER_CONFIRMATION_KEY.format(token=token)
             cache.set(redis_key, request.data["email"], timeout=settings.SOAQAZ_USER_CONFIRMATION_TIMEOUT)
@@ -67,7 +60,7 @@ class RegistrUserView(CreateAPIView):
                       from_email="sushentsevmacsim@yandex.ru",
                       recipient_list=[request.data["email"]])
             serializer.save()
-            return Response(data, status=status.HTTP_200_OK)
+            return Response({"resultCode": [0], "message": ["SUCCESS REGISTR"]})
         else:  # Иначе
             # Присваиваем data ошибку
             data = serializer.errors
@@ -115,9 +108,8 @@ class RegConfirmRepeat(APIView):
                               f"to confirm! \n" % lnk,
                       from_email="sushentsevmacsim@yandex.ru",
                       recipient_list=[request.data["email"]])
-            data = {}
-            data['response'] = True
-            return Response(data, status=status.HTTP_200_OK)
+
+            return Response({"resultCode": [0], "message": ["SUCCESS SEND MAIL"]})
 
 
 
