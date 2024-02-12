@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-+b@%u6xb!v3%kt1(5y4vgyz9c@==!wp700gqq=t0*xjs+=@=d!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['invest228.pythonanywhere.com', "94.228.123.11", "localhost"]
+ALLOWED_HOSTS = ['invest228.pythonanywhere.com', "94.228.123.11", "localhost", '127.0.0.1' ]
 
 
 # Application definition
@@ -101,7 +101,7 @@ WSGI_APPLICATION = 'invest_b.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'invest',
         'USER': 'mag_user',
         'PASSWORD': 'warlight123',
