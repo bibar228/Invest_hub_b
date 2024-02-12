@@ -40,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=50, unique=True, blank=False)
     login = models.CharField(max_length=50, unique=True, blank=False)
     phoneNumberRegex = RegexValidator(regex=r"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$")
-    phone = models.CharField(validators=[phoneNumberRegex], max_length=12, unique=True, blank=False)
+    phone = models.CharField(validators=[phoneNumberRegex], max_length=12, unique=True, blank=True)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 

@@ -84,7 +84,7 @@ def register_confirm(request, token):
         return Response({"resultCode": [0], "message": ["SUCCESS CONFIRM"]})
     else:
         return Response({"resultCode": [1], "message": [f"The confirmation time has expired"],
-                         "link": ["link for repeat confirm - http://127.0.0.1:8000/confirm_repeat/"]})
+                         "link": ["link for repeat confirm - http://0.0.0.0:8000/confirm_repeat/"]})
 
 
 class RegConfirmRepeat(APIView):
