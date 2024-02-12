@@ -37,7 +37,7 @@ class MyUserManager(BaseUserManager):
 # Создаём класс User
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True, unique=True)
-    email = models.EmailField(max_length=50, unique=True, blank=False)
+    email = models.EmailField(max_length=50, unique=True, blank=True)
     login = models.CharField(max_length=50, unique=True, blank=False)
     phoneNumberRegex = RegexValidator(regex=r"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$")
     phone = models.CharField(validators=[phoneNumberRegex], max_length=12, unique=True, blank=True)
