@@ -37,5 +37,5 @@ urlpatterns = [
     path('api/auth/registr/', RegistrUserView.as_view(), name='registr'),
     path("api/auth/log/", LoginView.as_view()),
     path("api/register_confirm/<token>/", register_confirm, name="register_confirm"),
-    path("api/confirm_repeat/", RegConfirmRepeat.as_view())
+    path("api/auth/confirm_repeat/", RegConfirmRepeat.as_view())
 ]
