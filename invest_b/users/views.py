@@ -52,11 +52,9 @@ class RegistrUserView(CreateAPIView):
                     "register_confirm", kwargs={"token": token}
                 )
             )
-            lnk = self.request.build_absolute_uri("http://127.0.0.1:5173/auth/confirm/token")
-
             send_mail(subject="Please confirm your registration!",
                       message=f"follow this link %s \n"
-                              f"to confirm! \n" % lnk,
+                              f"to confirm! \n" % confirm_link,
                       from_email="sushentsevmacsim@yandex.ru",
                       recipient_list=[request.data["email"]])
             serializer.save()
@@ -100,21 +98,13 @@ class RegConfirmRepeat(APIView):
                     "register_confirm", kwargs={"token": token}
                 )
             )
-
-            lnk = self.request.build_absolute_uri("http://127.0.0.1:5173/auth/confirm/token")
-
             send_mail(subject="Please confirm your registration!",
                       message=f"follow this link %s \n"
-                              f"to confirm! \n" % lnk,
+                              f"to confirm! \n" % confirm_link,
                       from_email="sushentsevmacsim@yandex.ru",
                       recipient_list=[request.data["email"]])
 
             return Response({"resultCode": [0], "message": ["SUCCESS SEND MAIL"]})
-
-
-
-def base(request):
-    return render(request, "base.html")
 
 
 class LoginView(APIView):

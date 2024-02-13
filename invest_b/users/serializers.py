@@ -12,14 +12,13 @@ class UserRegistrSerializer(serializers.ModelSerializer):
         # Поля модели которые будем использовать
         model = User
         # Назначаем поля которые будем использовать
-        fields = ['email', "login", 'password', 'password2', "phone"]
+        fields = ['email',  'password', 'password2', "phone"]
 
     # Метод для сохранения нового пользователя
     def save(self, *args, **kwargs):
         # Создаём объект класса User
         user = User(
-            email=self.validated_data['email'],  # Назначаем Email
-            login=self.validated_data["login"],
+            email=self.validated_data['email'],
             phone=self.validated_data["phone"]
         )
         # Проверяем на валидность пароль
@@ -39,25 +38,25 @@ class UserRegistrSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    login = serializers.CharField()
+    email = serializers.CharField()
     password = serializers.CharField()
 
     class Meta:
         model = User
-        fields = ['login', 'password']
+        fields = ['email', 'password']
 
     def validate(self, attrs):
         """Проверка на существование юзера в базе"""
         try:
-            user_ex = User.objects.get(login=attrs["login"])
+            user_ex = User.objects.get(email=attrs["email"])
         except:
             return "ERROR"
 
         """Проверка на правильность логина и пароля, подтверждение юзера"""
-        user = authenticate(login=attrs['login'], password=attrs['password'])
+        user = authenticate(email=attrs['email'], password=attrs['password'])
 
         if not user and not user_ex:
-            raise serializers.ValidationError({"resultCode": 1, "message": 'Incorrect login or password.'})
+            raise serializers.ValidationError({"resultCode": 1, "message": 'Incorrect email or password.'})
 
         if not user_ex.is_active:
             raise serializers.ValidationError({"resultCode": 1, "message": "User is disabled."})
