@@ -115,9 +115,10 @@ class LoginView(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid()
-        try:
-            user = serializer.validated_data['user']
-        except:
-            return Response({"resultCode": [1], "message": [f"ACCOUNT DOES NOT EXIST"]})
+        """Проверка на существование юзера"""
+        if serializer.validate(request.data) == "ERROR":
+            return Response({"resultCode": 1, "message": [f"ACCOUNT NOT REGISTER"]})
+
+        user = serializer.validated_data['user']
         login(request, user)
-        return Response({"resultCode": [0], "message": [f"Logged in {user}"]})
+        return Response({"resultCode": 0, "message": [f"Logged in {user}"]})

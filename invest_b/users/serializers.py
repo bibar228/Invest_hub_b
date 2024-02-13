@@ -52,14 +52,15 @@ class LoginSerializer(serializers.Serializer):
         except:
             return "ERROR"
 
-        """Проверка на правильность логина и пароля, подтверждение юзера"""
-        user = authenticate(email=attrs['email'], password=attrs['password'])
-
-        if not user and not user_ex:
-            raise serializers.ValidationError({"resultCode": 1, "message": 'Incorrect email or password.'})
-
+        """Проверка на активацию юзера"""
         if not user_ex.is_active:
             raise serializers.ValidationError({"resultCode": 1, "message": "User is disabled."})
+
+        """Проверка пароля"""
+        user = authenticate(email=attrs['email'], password=attrs['password'])
+
+        if user is None:
+            raise serializers.ValidationError({"resultCode": 1, "message": 'Incorrect password.'})
 
         return {'user': user, "password": attrs['password']}
 
@@ -74,7 +75,6 @@ class RegConfirmRepeatSerializer(serializers.Serializer):
         """Проверка на существование юзера в базе"""
         try:
             user = User.objects.get(email=self.validated_data["email"])
-            print(user)
         except:
             return "ERROR"
 
