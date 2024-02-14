@@ -2,6 +2,13 @@ from django.db import models
 from django.core.validators import RegexValidator
 # Create your models here.
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+import jwt
+from datetime import datetime, timedelta
+
+from django.db import models
+
+from invest_b import settings
+
 
 class MyUserManager(BaseUserManager):
     def _create_user(self, email, password, phone):
@@ -23,8 +30,8 @@ class MyUserManager(BaseUserManager):
         # Возвращаем нового созданного пользователя
         return self._create_user(email, password, phone)
 
-    def create_superuser(self, email, password, phone):
-        user = self.create_user(email, password, phone)
+    def create_superuser(self, email, password):
+        user = self.create_user(email, password)
         user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
@@ -47,6 +54,29 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+    @property
+    def token(self):
+        """
+        Позволяет получить токен пользователя путем вызова user.token, вместо
+        user._generate_jwt_token(). Декоратор @property выше делает это
+        возможным. token называется "динамическим свойством".
+        """
+        return self._generate_jwt_token()
+
+    def _generate_jwt_token(self):
+        """
+        Генерирует веб-токен JSON, в котором хранится идентификатор этого
+        пользователя, срок действия токена составляет 1 день от создания
+        """
+        dt = datetime.now() + timedelta(days=1)
+
+        token = jwt.encode({
+            'id': self.pk,
+            'exp': int(dt.strftime('%s'))
+        }, settings.SECRET_KEY, algorithm='HS256')
+
+        return token.decode('utf-8')
 
 class AuthtokenToken(models.Model):
     key = models.CharField(primary_key=True, max_length=40)

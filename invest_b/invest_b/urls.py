@@ -18,24 +18,22 @@ from django.contrib import admin
 from django.urls import path
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularSwaggerView,
+    SpectacularRedocView
+)
 
 from users.views import RegistrUserView, LoginView, register_confirm, RegConfirmRepeat
 
-schema_view = get_schema_view(
-    openapi.Info(
-        title="Django Invest Crypto Profit IMBA 3000",
-        default_version="v2",
-        description="Description",
-        license=openapi.License(name="BSD License"),
-    ),
-    public=True
-)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
     path('api/auth/registr/', RegistrUserView.as_view(), name='registr'),
     path("api/auth/log/", LoginView.as_view()),
     path("api/register_confirm/<token>/", register_confirm, name="register_confirm"),
-    path("api/auth/confirm_repeat/", RegConfirmRepeat.as_view())
-]
+    path("api/auth/confirm_repeat/", RegConfirmRepeat.as_view()),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    ]

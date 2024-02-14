@@ -5,14 +5,20 @@ from django.contrib.auth import authenticate
 
 class UserRegistrSerializer(serializers.ModelSerializer):
     # Поле для повторения пароля
-    password2 = serializers.CharField()
+    password2 = serializers.CharField(
+        max_length=32,
+        min_length=4,
+        write_only=True
+    )
+
+    token = serializers.CharField(max_length=255, read_only=True)
 
     # Настройка полей
     class Meta:
         # Поля модели которые будем использовать
         model = User
         # Назначаем поля которые будем использовать
-        fields = ['email',  'password', 'password2', "phone"]
+        fields = ['email',  'password', 'password2', "phone", "token"]
 
     # Метод для сохранения нового пользователя
     def save(self, *args, **kwargs):
@@ -28,7 +34,7 @@ class UserRegistrSerializer(serializers.ModelSerializer):
         # Проверяем совпадают ли пароли
         if password != password2:
             # Если нет, то выводим ошибку
-            raise serializers.ValidationError({password: "Пароль не совпадает"})
+            raise serializers.ValidationError({"resultCode": 1, "message": "Passwords don't match"})
         # Сохраняем пароль
         user.set_password(password)
         # Сохраняем пользователя

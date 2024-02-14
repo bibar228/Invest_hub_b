@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "analize",
     "users",
-    "drf_yasg",
+    'drf_spectacular'
 ]
 
 MIDDLEWARE = [
@@ -176,3 +176,15 @@ CACHES = {
 
 SOAQAZ_USER_CONFIRMATION_KEY = "user_confirmation_{token}"
 SOAQAZ_USER_CONFIRMATION_TIMEOUT = 300
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Django Invest Crypto Profit IMBA 3000',
+    'DESCRIPTION': 'Django Invest Crypto Profit IMBA 3000',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
