@@ -2,6 +2,8 @@ from rest_framework import serializers
 # Подключаем модель user
 from .models import User
 from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
+
 
 class UserRegistrSerializer(serializers.ModelSerializer):
     # Поле для повторения пароля
@@ -67,8 +69,7 @@ class LoginSerializer(serializers.Serializer):
 
         if user is None:
             raise serializers.ValidationError({"resultCode": 1, "message": 'Incorrect password.'})
-
-        return {'user': user, "password": attrs['password']}
+        return {'email': user_ex.email, "password": attrs['password']}
 
 class RegConfirmRepeatSerializer(serializers.Serializer):
     email = serializers.CharField()

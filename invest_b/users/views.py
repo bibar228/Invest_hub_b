@@ -7,7 +7,7 @@ from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.core.cache import cache
 from django.shortcuts import render
-
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 # Подключаем компонент для ответа
 from rest_framework.decorators import api_view
@@ -57,8 +57,14 @@ class RegistrUserView(CreateAPIView):
                               f"to confirm! \n" % confirm_link,
                       from_email="sushentsevmacsim@yandex.ru",
                       recipient_list=[request.data["email"]])
-            serializer.save()
-            return Response({"resultCode": [0], "message": ["SUCCESS REGISTR"]})
+            user = serializer.save()
+            refresh = RefreshToken.for_user(user)
+            refresh.payload.update({  # Полезная информация в самом токене
+                'user_id': user.id,
+                'email': user.email
+            })
+            return Response({"resultCode": [0], "message": ["SUCCESS REGISTR"], 'refresh': str(refresh), 'access': str(refresh.access_token)})
+
         else:  # Иначе
             # Присваиваем data ошибку
             data = serializer.errors
@@ -119,6 +125,12 @@ class LoginView(APIView):
         if serializer.validate(request.data) == "ERROR":
             return Response({"resultCode": 1, "message": [f"ACCOUNT NOT REGISTER"]})
 
-        user = serializer.validated_data['user']
+        #user = serializer.validated_data['user']
+        user = authenticate(email=serializer.validated_data['email'], password=serializer.validated_data['password'])
         login(request, user)
-        return Response({"resultCode": 0, "message": [f"Logged in {user}"]})
+        refresh = RefreshToken.for_user(user)
+        refresh.payload.update({
+            'user_id': user.id,
+            'email': user.email
+        })
+        return Response({"resultCode": 0, "message": [f"Logged in {user}"], 'refresh': str(refresh),   'access': str(refresh.access_token)})
