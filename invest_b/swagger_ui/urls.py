@@ -6,11 +6,11 @@ try:
     from django.urls import path
 
     urlpatterns = [
-        path('api-doc/', yaml_to_html, name="api-doc"),
+        path('api/swagger', yaml_to_html, name="api-swagger"),
     ]
 except:
-    from django.conf.urls import  url
+    from django.conf.urls import url
 
     urlpatterns = [
-        url(r'^api-doc/', yaml_to_html, name="api-doc"),
+        url(r'^api/swagger/', yaml_to_html, name="api-swagger"),
     ]
