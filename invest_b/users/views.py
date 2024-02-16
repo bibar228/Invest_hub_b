@@ -139,4 +139,4 @@ class LoginView(APIView):
             'user_id': user.id,
             'email': user.email
         })
-        return Response({"resultCode": 0, "message": f"Logged in {user}", 'refresh': str(refresh),   'access': str(refresh.access_token)})
+        return Response({"resultCode": 0, "message": f"Logged in {user}",  'access_token': str(refresh.access_token), 'refresh_token': str(refresh)})

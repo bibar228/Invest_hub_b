@@ -14,7 +14,7 @@ paths:
     post:
       tags:
         - registration
-      summary: Метод for регистрации users
+      summary: Метод for регистрации users. Возвращает токен для авторизации юзера
       requestBody:
         required: true
         content:
@@ -56,7 +56,7 @@ paths:
     post:
       tags:
         - registration
-      summary: Метод for логин юзер
+      summary: Метод for логин юзер. Возвращает токен для авторизации и рефреш токен для обновления обычного.
       requestBody:
         required: true
         content:
@@ -98,7 +98,7 @@ paths:
     post:
       tags:
         - registration
-      summary: Метод для повторной отправки токена, чтобы активировать аккаунт после регистрации(если юзер завтыкал и токен протух)
+      summary: Метод для повторной отправки токена(токен для активации аккаунта, не jwt), чтобы активировать аккаунт после регистрации(если юзер завтыкал и токен протух)
       requestBody:
         required: true
         content:
