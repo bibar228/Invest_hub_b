@@ -6,7 +6,7 @@ try:
     from django.urls import path
 
     urlpatterns = [
-        path('api/swagger', yaml_to_html, name="api-swagger"),
+        path('api/swagger/', yaml_to_html, name="api-swagger"),
     ]
 except:
     from django.conf.urls import url
