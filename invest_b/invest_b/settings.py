@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     "analize",
     "users",
-    'drf_spectacular',
     'rest_framework_simplejwt',
+    "swagger_ui"
 ]
 
 MIDDLEWARE = [
@@ -233,3 +233,5 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
+
+SWAGGER_YAML_FILE = os.path.join(BASE_DIR, 'openapi.yaml')

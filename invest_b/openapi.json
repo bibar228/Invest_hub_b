@@ -1,0 +1,352 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "INVEST HUB IMBA 3000",
+    "version": "1.0.11"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000/",
+      "description": "Back server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "registration",
+      "description": "API for registr"
+    }
+  ],
+  "paths": {
+    "/api/auth/registr/": {
+      "post": {
+        "tags": [
+          "registration"
+        ],
+        "summary": "Метод for регистрации users",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserReg"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/UserReg"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/UserReg"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Всё нестандартное",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/log/": {
+      "post": {
+        "tags": [
+          "registration"
+        ],
+        "summary": "Метод for логин юзер",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLog"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLog"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLog"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLogResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLogResponse"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLogResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Всё нестандартное",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/confirm_repeat/": {
+      "post": {
+        "tags": [
+          "registration"
+        ],
+        "summary": "Метод для повторной отправки токена, чтобы активировать аккаунт после регистрации(если юзер завтыкал и токен протух)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmReq"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmReq"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfirmRes"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfirmRes"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfirmRes"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Всё нестандартное",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserReg": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@mail.ru"
+          },
+          "password": {
+            "type": "string",
+            "example": "debil228"
+          },
+          "password2": {
+            "type": "string",
+            "example": "debil228"
+          },
+          "phone": {
+            "type": "string",
+            "example": 79223708910
+          }
+        }
+      },
+      "UserLog": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@mail.ru"
+          },
+          "password": {
+            "type": "string",
+            "example": "debil228"
+          }
+        }
+      },
+      "UserLogResponse": {
+        "type": "object",
+        "properties": {
+          "resultCode": {
+            "type": "integer",
+            "example": 0
+          },
+          "message": {
+            "type": "string",
+            "example": "Logged in profik0077@mail.ru"
+          },
+          "refresh": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcwODE5MzEwOCwiaWF0IjoxNzA4MTA2NzA4LCJqdGkiOiJjYjBhYTE2OTc4ZmY0YTllYmU4ZTczMjY0NTkzN2VjOCIsInVzZXJfaWQiOjIsImVtYWlsIjoicHJvZmlrMDA3N0BtYWlsLnJ1In0.FgSoWbczURad4SB0wQB_f9F_fedV8dg0FlJGPHStoT4"
+          },
+          "access": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA4MTA3MDA4LCJpYXQiOjE3MDgxMDY3MDgsImp0aSI6IjI2YzcyMzk5OTA1ODRlNjA4MzQzOThiN2QwOTg2YTI5IiwidXNlcl9pZCI6MiwiZW1haWwiOiJwcm9maWswMDc3QG1haWwucnUifQ.OYMRmPXBj-A-Qcn-hQAM9kcOD4Rva2F9ugkUruNrEdQ"
+          }
+        }
+      },
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "resultCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string",
+            "example": "SUCCESS REGISTR"
+          },
+          "access_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA4MTA3MDA4LCJpYXQiOjE3MDgxMDY3MDgsImp0aSI6IjI2YzcyMzk5OTA1ODRlNjA4MzQzOThiN2QwOTg2YTI5IiwidXNlcl9pZCI6MiwiZW1haWwiOiJwcm9maWswMDc3QG1haWwucnUifQ.OYMRmPXBj-A-Qcn-hQAM9kcOD4Rva2F9ugkUruNrEdQ"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "resultCode",
+          "message"
+        ],
+        "properties": {
+          "resultCode": {
+            "type": "integer",
+            "example": 1
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ConfirmRes": {
+        "type": "object",
+        "required": [
+          "resultCode",
+          "message"
+        ],
+        "properties": {
+          "resultCode": {
+            "type": "integer",
+            "example": 0
+          },
+          "message": {
+            "type": "string",
+            "example": "SUCCESS SEND MAIL"
+          }
+        }
+      },
+      "ConfirmReq": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "debil@mail.ru"
+          }
+        }
+      }
+    }
+  }
+}

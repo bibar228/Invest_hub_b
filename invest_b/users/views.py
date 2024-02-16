@@ -63,11 +63,15 @@ class RegistrUserView(CreateAPIView):
                 'user_id': user.id,
                 'email': user.email
             })
-            return Response({"resultCode": [0], "message": ["SUCCESS REGISTR"], 'refresh': str(refresh), 'access': str(refresh.access_token)})
+            return Response({"resultCode": 0, "message": "SUCCESS REGISTR", 'refresh': str(refresh), 'access_token': str(refresh.access_token)})
 
         else:  # Иначе
             # Присваиваем data ошибку
-            data = serializer.errors
+            data = {}
+            data["resultCode"] = 1
+            data["email"] = serializer.errors["email"][0]
+
+
             # Возвращаем ошибку
             return Response(data)
 
@@ -79,10 +83,10 @@ def register_confirm(request, token):
 
     if buyer_info:
         User.objects.filter(email=buyer_info).update(is_active=True)
-        return Response({"resultCode": [0], "message": ["SUCCESS CONFIRM"]})
+        return Response({"resultCode": 0, "message": "SUCCESS CONFIRM"})
     else:
-        return Response({"resultCode": [1], "message": [f"The confirmation time has expired"],
-                         "link": ["link for repeat confirm - http://0.0.0.0:8000/confirm_repeat/"]})
+        return Response({"resultCode": 1, "message": f"The confirmation time has expired",
+                         "link": "link for repeat confirm - http://0.0.0.0:8000/confirm_repeat/"})
 
 
 class RegConfirmRepeat(APIView):
@@ -95,7 +99,9 @@ class RegConfirmRepeat(APIView):
         serializer = RegConfirmRepeatSerializer(data=request.data)
         serializer.is_valid()
 
-        if serializer.is_valid():
+        if serializer.validate() == "ERROR":
+            return Response({"resultCode": 1, "message": "email address incorrect"})
+        else:
             token = uuid.uuid4().hex
             redis_key = settings.SOAQAZ_USER_CONFIRMATION_KEY.format(token=token)
             cache.set(redis_key, request.data["email"], timeout=settings.SOAQAZ_USER_CONFIRMATION_TIMEOUT)
@@ -110,7 +116,7 @@ class RegConfirmRepeat(APIView):
                       from_email="sushentsevmacsim@yandex.ru",
                       recipient_list=[request.data["email"]])
 
-            return Response({"resultCode": [0], "message": ["SUCCESS SEND MAIL"]})
+            return Response({"resultCode": 0, "message": "SUCCESS SEND MAIL"})
 
 
 class LoginView(APIView):
@@ -123,7 +129,7 @@ class LoginView(APIView):
         serializer.is_valid()
         """Проверка на существование юзера"""
         if serializer.validate(request.data) == "ERROR":
-            return Response({"resultCode": 1, "message": [f"ACCOUNT NOT REGISTER"]})
+            return Response({"resultCode": 1, "message": f"ACCOUNT NOT REGISTER"})
 
         #user = serializer.validated_data['user']
         user = authenticate(email=serializer.validated_data['email'], password=serializer.validated_data['password'])
@@ -133,4 +139,4 @@ class LoginView(APIView):
             'user_id': user.id,
             'email': user.email
         })
-        return Response({"resultCode": 0, "message": [f"Logged in {user}"], 'refresh': str(refresh),   'access': str(refresh.access_token)})
+        return Response({"resultCode": 0, "message": f"Logged in {user}", 'refresh': str(refresh),   'access': str(refresh.access_token)})
