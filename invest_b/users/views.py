@@ -178,9 +178,9 @@ def recovery_password_confirm(request, token):
     buyer_info = cache.get(redis_key) or {}
 
     if buyer_info[0]:
-        print(buyer_info[0])
-        print(buyer_info[1])
-        User.objects.filter(email=buyer_info[0]).update(password=buyer_info[1])
+        user = User.objects.get(email=buyer_info[0])
+        user.set_password(buyer_info[1])
+        user.save()
         return Response({"resultCode": 0, "message": "SUCCESS CONFIRM"})
     else:
         return Response({"resultCode": 1, "message": f"The confirmation time has expired",

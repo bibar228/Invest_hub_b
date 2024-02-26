@@ -65,11 +65,8 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError({"resultCode": 1, "message": "User is disabled."})
 
         """Проверка пароля"""
-
         user = authenticate(email=attrs['email'], password=attrs['password'])
-        print(user_ex.password)
-        print(user)
-        print(attrs['email'], attrs['password'])
+
         if user is None:
             raise serializers.ValidationError({"resultCode": 1, "message": 'Incorrect password.'})
         return {'email': user_ex.email, "password": attrs['password']}
