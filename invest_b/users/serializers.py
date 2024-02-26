@@ -65,8 +65,11 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError({"resultCode": 1, "message": "User is disabled."})
 
         """Проверка пароля"""
-        user = authenticate(email=attrs['email'], password=attrs['password'])
 
+        user = authenticate(email=attrs['email'], password=attrs['password'])
+        print(user_ex.password)
+        print(user)
+        print(attrs['email'], attrs['password'])
         if user is None:
             raise serializers.ValidationError({"resultCode": 1, "message": 'Incorrect password.'})
         return {'email': user_ex.email, "password": attrs['password']}
@@ -86,3 +89,39 @@ class RegConfirmRepeatSerializer(serializers.Serializer):
             return "ERROR"
 
         return user
+
+class ChangePasswordSerializer(serializers.Serializer):
+    password = serializers.CharField()
+    password2 = serializers.CharField()
+
+    class Meta:
+        model = User
+        fields = ['password', 'password2']
+
+    def save(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({"resultCode": 1, "message": "Passwords don't match"})
+
+
+
+
+class RecoveryPasswordSerializer(serializers.Serializer):
+    email = serializers.CharField()
+
+    class Meta:
+        model = User
+        fields = ['email']
+
+    def validate(self, attrs):
+        """Проверка на существование юзера в базе"""
+        try:
+            user_ex = User.objects.get(email=attrs["email"])
+        except:
+            return "ERROR"
+
+        return {'email': user_ex.email}
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = "__all__"

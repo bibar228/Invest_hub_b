@@ -15,21 +15,36 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth.views import LogoutView
 from django.urls import path, include
 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
-from users.views import RegistrUserView, LoginView, register_confirm, RegConfirmRepeat
+from swagger_ui.views import view_swagger_json
+
+from users.views import RecoveryPassword
+from users.views import ChangePassword
+from users.views import UserView
+from users.views import logout_view
+from users.views import home
+from users.views import RegistrUserView, LoginView, register_confirm, RegConfirmRepeat, recovery_password_confirm
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("", home),
     path('api/auth/registr/', RegistrUserView.as_view(), name='registr'),
     path("api/auth/log/", LoginView.as_view()),
     path("api/register_confirm/<token>/", register_confirm, name="register_confirm"),
     path("api/auth/confirm_repeat/", RegConfirmRepeat.as_view()),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('', include('swagger_ui.urls'))
+    path('', include('swagger_ui.urls')),
+    path('api/swagger_json/', view_swagger_json),
+    path('api/auth/logout/', logout_view, name='logout'),
+    path("a/", UserView.as_view({'get': 'list'})),
+    path("api/auth/change_password/", ChangePassword.as_view()),
+    path("api/auth/recovery_password/", RecoveryPassword.as_view()),
+    path("api/auth/recovery_password/<token>/", recovery_password_confirm, name="recovery_password_confirm")
     ]

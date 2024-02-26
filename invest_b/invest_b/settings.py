@@ -180,7 +180,6 @@ SOAQAZ_USER_CONFIRMATION_KEY = "user_confirmation_{token}"
 SOAQAZ_USER_CONFIRMATION_TIMEOUT = 300
 
 REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
@@ -235,3 +234,6 @@ SIMPLE_JWT = {
 }
 
 SWAGGER_YAML_FILE = os.path.join(BASE_DIR, 'openapi.yaml')
+
+SWAGGER_JSON_FILE = os.path.join(BASE_DIR, 'openapi.json')
+

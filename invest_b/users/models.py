@@ -55,34 +55,4 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-    @property
-    def token(self):
-        """
-        Позволяет получить токен пользователя путем вызова user.token, вместо
-        user._generate_jwt_token(). Декоратор @property выше делает это
-        возможным. token называется "динамическим свойством".
-        """
-        return self._generate_jwt_token()
 
-    def _generate_jwt_token(self):
-        """
-        Генерирует веб-токен JSON, в котором хранится идентификатор этого
-        пользователя, срок действия токена составляет 1 день от создания
-        """
-        dt = datetime.now() + timedelta(days=1)
-
-        token = jwt.encode({
-            'id': self.pk,
-            'exp': int(dt.strftime('%S'))
-        }, settings.SECRET_KEY, algorithm='HS256')
-
-        return token.decode('utf-8')
-
-class AuthtokenToken(models.Model):
-    key = models.CharField(primary_key=True, max_length=40)
-    created = models.DateTimeField()
-    user = models.OneToOneField(User, models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'authtoken_token'

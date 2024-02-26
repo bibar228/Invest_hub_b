@@ -1,6 +1,6 @@
 import types
 import uuid
-
+from django.contrib.auth import logout
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.urls import reverse_lazy, reverse
@@ -8,21 +8,24 @@ from django.utils.decorators import method_decorator
 from django.core.cache import cache
 from django.shortcuts import render
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework import status
+from rest_framework import status, viewsets, permissions
 # Подключаем компонент для ответа
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 # Подключаем компонент для создания данных
 from rest_framework.generics import CreateAPIView, get_object_or_404
 # Подключаем компонент для прав доступа
+import string
+from random import choice
 
 from rest_framework.views import APIView
-
+from django.shortcuts import redirect
 # Подключаем модель User
 from invest_b import settings
-from .models import User, AuthtokenToken
+from .models import User
 # Подключаем UserRegistrSerializer
-from .serializers import UserRegistrSerializer, RegConfirmRepeatSerializer
+from .serializers import UserRegistrSerializer, RegConfirmRepeatSerializer, UserSerializer, ChangePasswordSerializer, \
+    RecoveryPasswordSerializer
 from django.contrib.auth import authenticate, login
 from .serializers import LoginSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -52,26 +55,36 @@ class RegistrUserView(CreateAPIView):
                     "register_confirm", kwargs={"token": token}
                 )
             )
-            send_mail(subject="Please confirm your registration!",
-                      message=f"follow this link %s \n"
-                              f"to confirm! \n" % confirm_link,
-                      from_email="sushentsevmacsim@yandex.ru",
-                      recipient_list=[request.data["email"]])
+            try:
+                send_mail(subject="Please confirm your registration!",
+                          message=f"follow this link %s \n"
+                                  f"to confirm! \n" % confirm_link,
+                          from_email="sushentsevmacsim@yandex.ru",
+                          recipient_list=[request.data["email"]])
+            except Exception as e:
+                print(e)
+                return Response({"resultCode": 1, "message": f"There is no such mail"})
+
             user = serializer.save()
             refresh = RefreshToken.for_user(user)
             refresh.payload.update({  # Полезная информация в самом токене
                 'user_id': user.id,
                 'email': user.email
             })
-            return Response({"resultCode": 0, "message": "SUCCESS REGISTR", 'refresh': str(refresh), 'access_token': str(refresh.access_token)})
+            """Установка рефреш токена в куки"""
+            response = Response()
+            response.set_cookie("refresh", str(refresh), httponly=True)
+            response.data = {"resultCode": 0, "message": f"Logged in {user}", 'access_token': str(refresh.access_token)}
+            return response
 
         else:  # Иначе
             # Присваиваем data ошибку
             data = {}
             data["resultCode"] = 1
-            data["email"] = serializer.errors["email"][0]
-
-
+            try:
+                data["message"] = serializer.errors["email"]
+            except:
+                data["message"] = serializer.errors["phone"]
             # Возвращаем ошибку
             return Response(data)
 
@@ -139,4 +152,79 @@ class LoginView(APIView):
             'user_id': user.id,
             'email': user.email
         })
-        return Response({"resultCode": 0, "message": f"Logged in {user}",  'access_token': str(refresh.access_token), 'refresh_token': str(refresh)})
+        """Установка рефреш токена в куки"""
+        response = Response()
+        response.set_cookie("refresh", str(refresh), httponly=True)
+        response.data = {"resultCode": 0, "message": f"Logged in {user}",  'access_token': str(refresh.access_token)}
+        return response
+
+class ChangePassword(APIView):
+    permission_classes = (AllowAny,)
+    authentication_classes = ()
+    serializer_class = ChangePasswordSerializer
+
+    def post(self, request):
+        print(request.data)
+        serializer = ChangePasswordSerializer(data=request.data)
+        serializer.is_valid()
+        """Проверка на существование юзера"""
+        if serializer.validate(request.data) == "ERROR":
+            return Response({"resultCode": 1, "message": f"ACCOUNT NOT REGISTER"})
+
+@api_view(('GET',))
+def recovery_password_confirm(request, token):
+    """Если токен есть в редисе, то находим пользователя и меняем пароль, если токен протух, то ошибка и ссылка на повторный запрос токена для подтверждения"""
+    redis_key = settings.SOAQAZ_USER_CONFIRMATION_KEY.format(token=token)
+    buyer_info = cache.get(redis_key) or {}
+
+    if buyer_info[0]:
+        print(buyer_info[0])
+        print(buyer_info[1])
+        User.objects.filter(email=buyer_info[0]).update(password=buyer_info[1])
+        return Response({"resultCode": 0, "message": "SUCCESS CONFIRM"})
+    else:
+        return Response({"resultCode": 1, "message": f"The confirmation time has expired",
+                         "link": "link for repeat confirm - http://0.0.0.0:8000/confirm_repeat/"})
+
+class RecoveryPassword(APIView):
+    permission_classes = (AllowAny,)
+    authentication_classes = ()
+    serializer_class = RecoveryPasswordSerializer
+
+    def post(self, request):
+        serializer = RecoveryPasswordSerializer(data=request.data)
+        serializer.is_valid()
+        """Проверка на существование юзера"""
+        if serializer.validate(request.data) == "ERROR":
+            return Response({"resultCode": 1, "message": f"ACCOUNT NOT REGISTER"})
+
+        token = uuid.uuid4().hex
+        new_password = ''.join(choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for x in range(8, 20))
+        redis_key = settings.SOAQAZ_USER_CONFIRMATION_KEY.format(token=token)
+        cache.set(redis_key, [request.data["email"], new_password], timeout=settings.SOAQAZ_USER_CONFIRMATION_TIMEOUT)
+        confirm_link = self.request.build_absolute_uri(
+            reverse("recovery_password_confirm", kwargs={"token": token})
+        )
+        send_mail(subject="Please confirm recovery your password!",
+                  message=f"Your new password is {new_password}\n"
+                          f"follow this link %s \n"
+                          f"to confirm! \n" % confirm_link,
+                  from_email="sushentsevmacsim@yandex.ru",
+                  recipient_list=[request.data["email"]])
+
+        return Response({"resultCode": 0, "message": "SUCCESS SEND MAIL"})
+
+class UserView(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = UserSerializer
+
+def logout_view(request):
+    if request.method == "GET":
+        logout(request)
+        return redirect("/")
+
+def home(request):
+    return HttpResponse(f"PRIVET")
