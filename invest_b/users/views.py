@@ -29,7 +29,6 @@ from .serializers import UserRegistrSerializer, RegConfirmRepeatSerializer, User
 from django.contrib.auth import authenticate, login
 from .serializers import LoginSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from django.views.decorators.csrf import csrf_protect
 
 
 # Создаём класс RegistrUserView
@@ -63,6 +62,9 @@ class RegistrUserView(CreateAPIView):
                           recipient_list=[request.data["email"]])
             except Exception as e:
                 return Response({"resultCode": 1, "message": f"There is no such mail"})
+
+            if serializer.save() == {"resultCode": 1, "message": "Passwords don't match"}:
+                return Response({"resultCode": 1, "message": "Passwords don't match"})
 
             user = serializer.save()
             refresh = RefreshToken.for_user(user)
@@ -142,6 +144,12 @@ class LoginView(APIView):
         """Проверка на существование юзера"""
         if serializer.validate(request.data) == "ERROR":
             return Response({"resultCode": 1, "message": f"ACCOUNT NOT REGISTER"})
+
+        if serializer.validate(request.data) == {"resultCode": 1, "message": "User is disabled."}:
+            return Response({"resultCode": 1, "message": "User is disabled."})
+
+        if serializer.validate(request.data) == {"resultCode": 1, "message": 'Incorrect password.'}:
+            return Response({"resultCode": 1, "message": 'Incorrect password.'})
 
         #user = serializer.validated_data['user']
         user = authenticate(email=serializer.validated_data['email'], password=serializer.validated_data['password'])

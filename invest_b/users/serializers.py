@@ -36,7 +36,7 @@ class UserRegistrSerializer(serializers.ModelSerializer):
         # Проверяем совпадают ли пароли
         if password != password2:
             # Если нет, то выводим ошибку
-            raise serializers.ValidationError({"resultCode": 1, "message": "Passwords don't match"})
+            return {"resultCode": 1, "message": "Passwords don't match"}
         # Сохраняем пароль
         user.set_password(password)
         # Сохраняем пользователя
@@ -62,13 +62,13 @@ class LoginSerializer(serializers.Serializer):
 
         """Проверка на активацию юзера"""
         if not user_ex.is_active:
-            raise serializers.ValidationError({"resultCode": 1, "message": "User is disabled."})
+            return {"resultCode": 1, "message": "User is disabled."}
 
         """Проверка пароля"""
         user = authenticate(email=attrs['email'], password=attrs['password'])
 
         if user is None:
-            raise serializers.ValidationError({"resultCode": 1, "message": 'Incorrect password.'})
+            return {"resultCode": 1, "message": 'Incorrect password.'}
         return {'email': user_ex.email, "password": attrs['password']}
 
 class RegConfirmRepeatSerializer(serializers.Serializer):
