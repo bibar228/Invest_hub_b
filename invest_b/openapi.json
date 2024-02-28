@@ -22,7 +22,7 @@
         "tags": [
           "registration"
         ],
-        "summary": "Метод for регистрации users",
+        "summary": "Метод for регистрации users. Возвращает токен для авторизации юзера",
         "requestBody": {
           "required": true,
           "content": {
@@ -69,17 +69,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Error_REG"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Error_REG"
                 }
               },
               "application/x-www-form-urlencoded": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Error_REG"
                 }
               }
             }
@@ -92,7 +92,7 @@
         "tags": [
           "registration"
         ],
-        "summary": "Метод for логин юзер",
+        "summary": "Метод for логин юзер. Возвращает токен для авторизации и рефреш токен для обновления обычного.",
         "requestBody": {
           "required": true,
           "content": {
@@ -139,17 +139,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Error_LOG"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Error_LOG"
                 }
               },
               "application/x-www-form-urlencoded": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Error_LOG"
                 }
               }
             }
@@ -162,7 +162,7 @@
         "tags": [
           "registration"
         ],
-        "summary": "Метод для повторной отправки токена, чтобы активировать аккаунт после регистрации(если юзер завтыкал и токен протух)",
+        "summary": "Метод для повторной отправки токена(токен для активации аккаунта, не jwt), чтобы активировать аккаунт после регистрации(если юзер завтыкал и токен протух)",
         "requestBody": {
           "required": true,
           "content": {
@@ -209,17 +209,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Error_CONFIRMREPEAT"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Error_CONFIRMREPEAT"
                 }
               },
               "application/x-www-form-urlencoded": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/Error_CONFIRMREPEAT"
                 }
               }
             }
@@ -273,13 +273,9 @@
           },
           "message": {
             "type": "string",
-            "example": "Logged in profik0077@mail.ru"
+            "example": "SUCCES LOG"
           },
-          "refresh": {
-            "type": "string",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcwODE5MzEwOCwiaWF0IjoxNzA4MTA2NzA4LCJqdGkiOiJjYjBhYTE2OTc4ZmY0YTllYmU4ZTczMjY0NTkzN2VjOCIsInVzZXJfaWQiOjIsImVtYWlsIjoicHJvZmlrMDA3N0BtYWlsLnJ1In0.FgSoWbczURad4SB0wQB_f9F_fedV8dg0FlJGPHStoT4"
-          },
-          "access": {
+          "access_token": {
             "type": "string",
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA4MTA3MDA4LCJpYXQiOjE3MDgxMDY3MDgsImp0aSI6IjI2YzcyMzk5OTA1ODRlNjA4MzQzOThiN2QwOTg2YTI5IiwidXNlcl9pZCI6MiwiZW1haWwiOiJwcm9maWswMDc3QG1haWwucnUifQ.OYMRmPXBj-A-Qcn-hQAM9kcOD4Rva2F9ugkUruNrEdQ"
           }
@@ -302,7 +298,7 @@
           }
         }
       },
-      "Error": {
+      "Error_REG": {
         "type": "object",
         "required": [
           "resultCode",
@@ -314,7 +310,42 @@
             "example": 1
           },
           "message": {
-            "type": "string"
+            "type": "string",
+            "example": "1. Passwords don't match 2. user with this email already exists. 3. user with this phone already exists. 4. There is no such mail"
+          }
+        }
+      },
+      "Error_LOG": {
+        "type": "object",
+        "required": [
+          "resultCode",
+          "message"
+        ],
+        "properties": {
+          "resultCode": {
+            "type": "integer",
+            "example": 1
+          },
+          "message": {
+            "type": "string",
+            "example": "1. ACCOUNT NOT REGISTER 2. User is disabled. 3. Incorrect password."
+          }
+        }
+      },
+      "Error_CONFIRMREPEAT": {
+        "type": "object",
+        "required": [
+          "resultCode",
+          "message"
+        ],
+        "properties": {
+          "resultCode": {
+            "type": "integer",
+            "example": 1
+          },
+          "message": {
+            "type": "string",
+            "example": "1. email address incorrect"
           }
         }
       },

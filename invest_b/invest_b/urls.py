@@ -32,8 +32,9 @@ from users.views import RegistrUserView, LoginView, register_confirm, RegConfirm
 
 
 urlpatterns = [
+    path('api/swagger_json/', view_swagger_json),
     path('admin/', admin.site.urls),
-    path("", home),
+    path("", home, name='zaglushka'),
     path('api/auth/registr/', RegistrUserView.as_view(), name='registr'),
     path("api/auth/log/", LoginView.as_view()),
     path("api/register_confirm/<token>/", register_confirm, name="register_confirm"),
@@ -41,7 +42,6 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('', include('swagger_ui.urls')),
-    path('api/swagger_json/', view_swagger_json),
     path('api/auth/logout/', logout_view, name='logout'),
     path("a/", UserView.as_view({'get': 'list'})),
     path("api/auth/change_password/", ChangePassword.as_view()),

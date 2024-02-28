@@ -62,7 +62,6 @@ class RegistrUserView(CreateAPIView):
                           from_email="sushentsevmacsim@yandex.ru",
                           recipient_list=[request.data["email"]])
             except Exception as e:
-                print(e)
                 return Response({"resultCode": 1, "message": f"There is no such mail"})
 
             user = serializer.save()
@@ -74,7 +73,7 @@ class RegistrUserView(CreateAPIView):
             """Установка рефреш токена в куки"""
             response = Response()
             response.set_cookie("refresh", str(refresh), httponly=True)
-            response.data = {"resultCode": 0, "message": f"Logged in {user}", 'access_token': str(refresh.access_token)}
+            response.data = {"resultCode": 0, "message": "SUCCESS REGISTR", 'access_token': str(refresh.access_token)}
             return response
 
         else:  # Иначе
@@ -155,7 +154,7 @@ class LoginView(APIView):
         """Установка рефреш токена в куки"""
         response = Response()
         response.set_cookie("refresh", str(refresh), httponly=True)
-        response.data = {"resultCode": 0, "message": f"Logged in {user}",  'access_token': str(refresh.access_token)}
+        response.data = {"resultCode": 0, "message": f"SUCCES LOG",  'access_token': str(refresh.access_token)}
         return response
 
 class ChangePassword(APIView):
