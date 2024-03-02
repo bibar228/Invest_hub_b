@@ -17,7 +17,7 @@ from rest_framework.generics import CreateAPIView, get_object_or_404
 # Подключаем компонент для прав доступа
 import string
 from random import choice
-
+import jwt
 from rest_framework.views import APIView
 from django.shortcuts import redirect
 # Подключаем модель User
@@ -29,9 +29,10 @@ from .serializers import UserRegistrSerializer, RegConfirmRepeatSerializer, User
 from django.contrib.auth import authenticate, login
 from .serializers import LoginSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
-
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 # Создаём класс RegistrUserView
+
 
 class RegistrUserView(CreateAPIView):
     # Добавляем в queryset
@@ -113,7 +114,7 @@ class RegConfirmRepeat(APIView):
         serializer = RegConfirmRepeatSerializer(data=request.data)
         serializer.is_valid()
 
-        if serializer.validate() == "ERROR":
+        if serializer.validate(request.data) == "ERROR":
             return Response({"resultCode": 1, "message": "email address incorrect"})
         else:
             token = uuid.uuid4().hex
@@ -171,12 +172,27 @@ class ChangePassword(APIView):
     serializer_class = ChangePasswordSerializer
 
     def post(self, request):
-        print(request.data)
+        token = request.data["token"]
+        """Проверка токена на актуальность(протух/не протух)"""
+        try:
+            payload_jwt = jwt.decode(
+                token,
+                settings.SIMPLE_JWT['SIGNING_KEY'],
+                algorithms=[settings.SIMPLE_JWT['ALGORITHM']])
+        except:
+            return Response({"resultCode": 1, "message": f"The Token has expired"})
+
         serializer = ChangePasswordSerializer(data=request.data)
         serializer.is_valid()
-        """Проверка на существование юзера"""
-        if serializer.validate(request.data) == "ERROR":
-            return Response({"resultCode": 1, "message": f"ACCOUNT NOT REGISTER"})
+        """Проверка на совпадение паролей"""
+        if serializer.save(request.data) == "ERROR":
+            return Response({"resultCode": 1, "message": f"Passwords don't match"})
+
+        user = User.objects.get(id=payload_jwt["user_id"])
+        user.set_password(request.data["password"])
+        user.save()
+
+        return Response({"resultCode": 0, "message": f"SUCCESS CHANGE"})
 
 @api_view(('GET',))
 def recovery_password_confirm(request, token):

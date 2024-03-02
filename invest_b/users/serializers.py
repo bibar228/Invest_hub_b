@@ -2,7 +2,7 @@ from rest_framework import serializers
 # Подключаем модель user
 from .models import User
 from django.contrib.auth import authenticate
-from rest_framework_simplejwt.tokens import RefreshToken
+
 
 
 class UserRegistrSerializer(serializers.ModelSerializer):
@@ -13,14 +13,13 @@ class UserRegistrSerializer(serializers.ModelSerializer):
         write_only=True
     )
 
-    token = serializers.CharField(max_length=255, read_only=True)
 
     # Настройка полей
     class Meta:
         # Поля модели которые будем использовать
         model = User
         # Назначаем поля которые будем использовать
-        fields = ['email',  'password', 'password2', "phone", "token"]
+        fields = ['email',  'password', 'password2', "phone"]
 
     # Метод для сохранения нового пользователя
     def save(self, *args, **kwargs):
@@ -78,10 +77,10 @@ class RegConfirmRepeatSerializer(serializers.Serializer):
         model = User
         fields = ['email']
 
-    def validate(self, *args, **kwargs):
+    def validate(self, attrs, *args, **kwargs):
         """Проверка на существование юзера в базе"""
         try:
-            user = User.objects.get(email=self.validated_data["email"])
+            user = User.objects.get(email=attrs["email"])
         except:
             return "ERROR"
 
@@ -90,6 +89,7 @@ class RegConfirmRepeatSerializer(serializers.Serializer):
 class ChangePasswordSerializer(serializers.Serializer):
     password = serializers.CharField()
     password2 = serializers.CharField()
+    token = serializers.CharField()
 
     class Meta:
         model = User
@@ -97,7 +97,7 @@ class ChangePasswordSerializer(serializers.Serializer):
 
     def save(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"resultCode": 1, "message": "Passwords don't match"})
+            return "ERROR"
 
 
 
