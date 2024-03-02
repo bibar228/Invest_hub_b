@@ -37,7 +37,7 @@ urlpatterns = [
     path("", home, name='zaglushka'),
     path('api/auth/registr/', RegistrUserView.as_view(), name='registr'),
     path("api/auth/log/", LoginView.as_view()),
-    path("http://localhost:5173/auth/confirmed/<token>", register_confirm, name="register_confirm"),
+    path("api/auth/confirmed/<token>/", register_confirm, name="register_confirm"),
     path("api/auth/confirm_repeat/", RegConfirmRepeat.as_view()),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
