@@ -72,7 +72,7 @@ class RegistrUserView(CreateAPIView):
             """Установка рефреш токена в куки"""
             response = Response()
             response.set_cookie("refresh", str(refresh), httponly=True)
-            response.data = {"resultCode": 0, "message": "SUCCESS REGISTR", 'access_token': str(refresh.access_token)}
+            response.data = {"resultCode": 0, "message": "SUCCESS REGISTR"}
             return response
 
         else:  # Иначе
