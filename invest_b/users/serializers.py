@@ -21,13 +21,12 @@ class UserRegistrSerializer(serializers.ModelSerializer):
         fields = ['email',  'password', 'password2', "phone"]
 
     # Метод для сохранения нового пользователя
-    def save(self, *args, **kwargs):
+    def valid(self, *args, **kwargs):
         # Создаём объект класса User
         user = User(
             email=self.validated_data['email'],
             phone=self.validated_data["phone"]
         )
-
         # Проверяем на валидность пароль
         password = self.validated_data['password']
         # Проверяем на валидность повторный пароль
@@ -38,7 +37,6 @@ class UserRegistrSerializer(serializers.ModelSerializer):
             return {"resultCode": 1, "message": "Passwords don't match"}
         # Сохраняем пароль
         user.set_password(password)
-
         return user
 
 

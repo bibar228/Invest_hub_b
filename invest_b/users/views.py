@@ -60,10 +60,11 @@ class RegistrUserView(CreateAPIView):
             except Exception as e:
                 return Response({"resultCode": 1, "message": f"There is no such mail"})
 
-            if serializer.save() == {"resultCode": 1, "message": "Passwords don't match"}:
+            if serializer.valid() == {"resultCode": 1, "message": "Passwords don't match"}:
                 return Response({"resultCode": 1, "message": "Passwords don't match"})
 
-            user = serializer.save()
+            user = serializer.valid()
+            user.save()
             refresh = RefreshToken.for_user(user)
             refresh.payload.update({  # Полезная информация в самом токене
                 'user_id': user.id,
