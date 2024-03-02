@@ -13,7 +13,6 @@ class UserRegistrSerializer(serializers.ModelSerializer):
         write_only=True
     )
 
-
     # Настройка полей
     class Meta:
         # Поля модели которые будем использовать
@@ -28,6 +27,7 @@ class UserRegistrSerializer(serializers.ModelSerializer):
             email=self.validated_data['email'],
             phone=self.validated_data["phone"]
         )
+
         # Проверяем на валидность пароль
         password = self.validated_data['password']
         # Проверяем на валидность повторный пароль
@@ -38,9 +38,7 @@ class UserRegistrSerializer(serializers.ModelSerializer):
             return {"resultCode": 1, "message": "Passwords don't match"}
         # Сохраняем пароль
         user.set_password(password)
-        # Сохраняем пользователя
-        user.save()
-        # Возвращаем нового пользователя
+
         return user
 
 

@@ -50,11 +50,7 @@ class RegistrUserView(CreateAPIView):
             token = uuid.uuid4().hex
             redis_key = settings.SOAQAZ_USER_CONFIRMATION_KEY.format(token=token)
             cache.set(redis_key, request.data["email"], timeout=settings.SOAQAZ_USER_CONFIRMATION_TIMEOUT)
-            confirm_link = self.request.build_absolute_uri(
-                reverse(
-                    "register_confirm", kwargs={"token": token}
-                )
-            )
+            confirm_link = self.request.build_absolute_uri(f"http://localhost:5173/auth/confirmed/{token}")
             try:
                 send_mail(subject="Please confirm your registration!",
                           message=f"follow this link %s \n"
