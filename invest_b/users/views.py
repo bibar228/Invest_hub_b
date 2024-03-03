@@ -73,7 +73,7 @@ class RegistrUserView(CreateAPIView):
             """Установка рефреш токена в куки"""
             response = Response()
             response.set_cookie("refresh", str(refresh), httponly=True)
-            response.data = {"resultCode": 0, "message": "SUCCESS REGISTR"}
+            response.data = {"resultCode": 0, "message": "SUCCESS"}
             return response
 
         else:  # Иначе
@@ -95,10 +95,9 @@ def register_confirm(request, token):
 
     if buyer_info:
         User.objects.filter(email=buyer_info).update(is_active=True)
-        return Response({"resultCode": 0, "message": "SUCCESS CONFIRM"})
+        return Response({"resultCode": 0, "message": "SUCCESS"})
     else:
-        return Response({"resultCode": 1, "message": f"The confirmation time has expired",
-                         "link": "link for repeat confirm - http://0.0.0.0:8000/confirm_repeat/"})
+        return Response({"resultCode": 1, "message": "The confirmation time has expired"})
 
 
 class RegConfirmRepeat(APIView):
@@ -125,7 +124,7 @@ class RegConfirmRepeat(APIView):
                       from_email="sushentsevmacsim@yandex.ru",
                       recipient_list=[request.data["email"]])
 
-            return Response({"resultCode": 0, "message": "SUCCESS SEND MAIL"})
+            return Response({"resultCode": 0, "message": "SUCCESS"})
 
 
 class LoginView(APIView):
@@ -186,7 +185,7 @@ class ChangePassword(APIView):
         user.set_password(request.data["password"])
         user.save()
 
-        return Response({"resultCode": 0, "message": f"SUCCESS CHANGE"})
+        return Response({"resultCode": 0, "message": f"SUCCESS"})
 
 @api_view(('GET',))
 def recovery_password_confirm(request, token):
@@ -198,10 +197,9 @@ def recovery_password_confirm(request, token):
         user = User.objects.get(email=buyer_info[0])
         user.set_password(buyer_info[1])
         user.save()
-        return Response({"resultCode": 0, "message": "SUCCESS CONFIRM"})
+        return Response({"resultCode": 0, "message": "SUCCESS"})
     else:
-        return Response({"resultCode": 1, "message": f"The confirmation time has expired",
-                         "link": "link for repeat confirm - http://0.0.0.0:8000/confirm_repeat/"})
+        return Response({"resultCode": 1, "message": f"The confirmation time has expired"})
 
 class RecoveryPassword(APIView):
     permission_classes = (AllowAny,)
@@ -229,7 +227,7 @@ class RecoveryPassword(APIView):
                   from_email="sushentsevmacsim@yandex.ru",
                   recipient_list=[request.data["email"]])
 
-        return Response({"resultCode": 0, "message": "SUCCESS SEND MAIL"})
+        return Response({"resultCode": 0, "message": "SUCCESS"})
 
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()

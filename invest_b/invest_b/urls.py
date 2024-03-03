@@ -32,19 +32,19 @@ from users.views import RegistrUserView, LoginView, register_confirm, RegConfirm
 
 
 urlpatterns = [
+    path('', include('swagger_ui.urls')),
     path('api/swagger_json/', view_swagger_json),
     path('admin/', admin.site.urls),
-    path("", home, name='zaglushka'),
     path('api/auth/registr/', RegistrUserView.as_view(), name='registr'),
     path("api/auth/log/", LoginView.as_view()),
     path("api/auth/confirmed/<token>/", register_confirm, name="register_confirm"),
     path("api/auth/confirm_repeat/", RegConfirmRepeat.as_view()),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('', include('swagger_ui.urls')),
-    path('api/auth/logout/', logout_view, name='logout'),
-    path("a/", UserView.as_view({'get': 'list'})),
+    #path('api/auth/logout/', logout_view, name='logout'),
     path("api/auth/change_password/", ChangePassword.as_view()),
     path("api/auth/recovery_password/", RecoveryPassword.as_view()),
-    path("api/auth/recovery_password/<token>/", recovery_password_confirm, name="recovery_password_confirm")
+    path("api/auth/recovery_password/<token>/", recovery_password_confirm, name="recovery_password_confirm"),
+    path("a/", UserView.as_view({'get': 'list'}), name='for_tests_back'),
+    path("", home, name='zaglushka'),
     ]

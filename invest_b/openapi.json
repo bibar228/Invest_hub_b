@@ -20,7 +20,7 @@
     "/api/auth/registr/": {
       "post": {
         "tags": [
-          "registration"
+          "registration & autentific"
         ],
         "summary": "Метод for регистрации users. Возвращает токен для авторизации юзера",
         "requestBody": {
@@ -49,17 +49,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/Success"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/Success"
                 }
               },
               "application/x-www-form-urlencoded": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/Success"
                 }
               }
             }
@@ -90,7 +90,7 @@
     "/api/auth/log/": {
       "post": {
         "tags": [
-          "registration"
+          "registration & autentific"
         ],
         "summary": "Метод for логин юзер. Возвращает токен для авторизации и рефреш токен для обновления обычного.",
         "requestBody": {
@@ -160,7 +160,7 @@
     "/api/auth/confirm_repeat/": {
       "post": {
         "tags": [
-          "registration"
+          "registration & autentific"
         ],
         "summary": "Метод для повторной отправки токена(токен для активации аккаунта, не jwt), чтобы активировать аккаунт после регистрации(если юзер завтыкал и токен протух)",
         "requestBody": {
@@ -189,17 +189,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConfirmRes"
+                  "$ref": "#/components/schemas/Success"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConfirmRes"
+                  "$ref": "#/components/schemas/Success"
                 }
               },
               "application/x-www-form-urlencoded": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConfirmRes"
+                  "$ref": "#/components/schemas/Success"
                 }
               }
             }
@@ -226,10 +226,519 @@
           }
         }
       }
+    },
+    "/api/auth/confirmed/<token>/": {
+      "post": {
+        "tags": [
+          "registration & autentific"
+        ],
+        "summary": "ручка для отправки токена (не jwt) чтобы подтвердить регистрацию (было ли нажатие на урл в почте)",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Всё нестандартное",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error_CONFIRM"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error_CONFIRM"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error_CONFIRM"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/token/": {
+      "post": {
+        "tags": [
+          "registration & autentific"
+        ],
+        "summary": "ручка для получения jwt токенов (акцесс и рефреш)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Token"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Token"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Token"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success_token"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success_token"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success_token"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Всё нестандартное",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error_token"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error_token"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error_token"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/token/refresh/": {
+      "post": {
+        "tags": [
+          "registration & autentific"
+        ],
+        "summary": "ручка для обновления jwt токена акцесс",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Token_refresh"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Token_refresh"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Token_refresh"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success_token_refresh"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success_token_refresh"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success_token_refresh"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Всё нестандартное",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error_token_refresh"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error_token_refresh"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error_token_refresh"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/change_password/": {
+      "post": {
+        "tags": [
+          "registration & autentific"
+        ],
+        "summary": "ручка для смены пароля авторизированного юзера",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Change_pass"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Change_pass"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Change_pass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Всё нестандартное",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Change_pass_error"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Change_pass_error"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/Change_pass_error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/recovery_password/": {
+      "post": {
+        "tags": [
+          "registration & autentific"
+        ],
+        "summary": "ручка для смены пароля юзера, забывшего пароль",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Recovery_pass"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Recovery_pass"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Recovery_pass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Всё нестандартное",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Recovery_pass_error"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Recovery_pass_error"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/Recovery_pass_error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/recovery_password/<token>/": {
+      "post": {
+        "tags": [
+          "registration & autentific"
+        ],
+        "summary": "ручка для подтверждения смены пароля (нажатие урла в почте)",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/Success"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Всё нестандартное",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error_CONFIRM"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error_CONFIRM"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error_CONFIRM"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "Recovery_pass": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "password": {
+            "type": "string",
+            "example": "VoFFka-SKUFF@mail.ru"
+          }
+        }
+      },
+      "Recovery_pass_error": {
+        "type": "object",
+        "properties": {
+          "resultCode": {
+            "type": "integer",
+            "example": 1
+          },
+          "message": {
+            "type": "string",
+            "example": "ACCOUNT NOT REGISTER"
+          }
+        }
+      },
+      "Change_pass": {
+        "type": "object",
+        "required": [
+          "password",
+          "password2",
+          "token"
+        ],
+        "properties": {
+          "password": {
+            "type": "string",
+            "example": "debil228"
+          },
+          "password2": {
+            "type": "string",
+            "example": "debil228"
+          },
+          "token": {
+            "type": "string",
+            "example": "hfghfgj4rj54jfgjfgjfg"
+          }
+        }
+      },
+      "Change_pass_error": {
+        "type": "object",
+        "properties": {
+          "resultCode": {
+            "type": "integer",
+            "example": 1
+          },
+          "message": {
+            "type": "string",
+            "example": "1. The Token has expired 2. Passwords don't match"
+          }
+        }
+      },
+      "Token_refresh": {
+        "type": "object",
+        "required": [
+          "refresh"
+        ],
+        "properties": {
+          "refresh": {
+            "type": "string",
+            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcwOTU0ODMxNCwiaWF0IjoxNzA5NDYxOTE0LCJqdGkiOiI3YjFkNGQzMWRjNmQ0OWRiODNjOGNkODQ0NjRkYjI5ZiIsInVzZXJfaWQiOjF9.r_fzNLrsfhhspqK4NflGHtUEHziwbUKKEGqE6SnIpu0"
+          }
+        }
+      },
+      "Success_token_refresh": {
+        "type": "object",
+        "properties": {
+          "access": {
+            "type": "string",
+            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA5NDYyMjE0LCJpYXQiOjE3MDk0NjE5MTQsImp0aSI6IjQ5YTNkMDJmMGFhYTQ5MDViMjkyOGE3OTNiOWZhNmZlIiwidXNlcl9pZCI6MX0.K7gWkeS4E8Z8up6oeVa0vaE0S_FgLYwXzbAhp7tTyt4"
+          }
+        }
+      },
+      "Error_token_refresh": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "string",
+            "example": "Token is invalid or expired"
+          },
+          "code": {
+            "type": "string",
+            "example": "token_not_valid"
+          }
+        }
+      },
+      "Token": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "barebuh007@mail.ru"
+          },
+          "password": {
+            "type": "string",
+            "example": "debil228"
+          }
+        }
+      },
+      "Success_token": {
+        "type": "object",
+        "properties": {
+          "refresh": {
+            "type": "string",
+            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcwOTU0ODMxNCwiaWF0IjoxNzA5NDYxOTE0LCJqdGkiOiI3YjFkNGQzMWRjNmQ0OWRiODNjOGNkODQ0NjRkYjI5ZiIsInVzZXJfaWQiOjF9.r_fzNLrsfhhspqK4NflGHtUEHziwbUKKEGqE6SnIpu0"
+          },
+          "access": {
+            "type": "string",
+            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA5NDYyMjE0LCJpYXQiOjE3MDk0NjE5MTQsImp0aSI6IjQ5YTNkMDJmMGFhYTQ5MDViMjkyOGE3OTNiOWZhNmZlIiwidXNlcl9pZCI6MX0.K7gWkeS4E8Z8up6oeVa0vaE0S_FgLYwXzbAhp7tTyt4"
+          }
+        }
+      },
+      "Error_token": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "string",
+            "example": "No active account found with the given credentials"
+          }
+        }
+      },
       "UserReg": {
         "type": "object",
         "properties": {
@@ -274,23 +783,6 @@
           "message": {
             "type": "string",
             "example": "SUCCES LOG"
-          },
-          "access_token": {
-            "type": "string",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA4MTA3MDA4LCJpYXQiOjE3MDgxMDY3MDgsImp0aSI6IjI2YzcyMzk5OTA1ODRlNjA4MzQzOThiN2QwOTg2YTI5IiwidXNlcl9pZCI6MiwiZW1haWwiOiJwcm9maWswMDc3QG1haWwucnUifQ.OYMRmPXBj-A-Qcn-hQAM9kcOD4Rva2F9ugkUruNrEdQ"
-          }
-        }
-      },
-      "ApiResponse": {
-        "type": "object",
-        "properties": {
-          "resultCode": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string",
-            "example": "SUCCESS REGISTR"
           },
           "access_token": {
             "type": "string",
@@ -345,11 +837,28 @@
           },
           "message": {
             "type": "string",
-            "example": "1. email address incorrect"
+            "example": "email address incorrect"
           }
         }
       },
-      "ConfirmRes": {
+      "Error_CONFIRM": {
+        "type": "object",
+        "required": [
+          "resultCode",
+          "message"
+        ],
+        "properties": {
+          "resultCode": {
+            "type": "integer",
+            "example": 1
+          },
+          "message": {
+            "type": "string",
+            "example": "The confirmation time has expired"
+          }
+        }
+      },
+      "Success": {
         "type": "object",
         "required": [
           "resultCode",
@@ -362,7 +871,7 @@
           },
           "message": {
             "type": "string",
-            "example": "SUCCESS SEND MAIL"
+            "example": "SUCCESS"
           }
         }
       },
