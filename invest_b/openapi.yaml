@@ -167,78 +167,24 @@ paths:
             application/x-www-form-urlencoded:
               schema:
                 $ref: '#/components/schemas/Error_CONFIRM'
-  /api/token/:
-    post:
-      tags:
-        - registration & autentific
-      summary: ручка для получения jwt токенов (акцесс и рефреш)
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Token'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Token'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Token'
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Success_token'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Success_token'
-            application/x-www-form-urlencoded:
-              schema:
-                $ref: '#/components/schemas/Success_token'
-        "default":
-          description: Всё нестандартное
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error_token'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Error_token'
-            application/x-www-form-urlencoded:
-              schema:
-                $ref: '#/components/schemas/Error_token'
   /api/token/refresh/:
-    post:
+    get:
       tags:
         - registration & autentific
-      summary: ручка для обновления jwt токена акцесс
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Token_refresh'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Token_refresh'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Token_refresh'
+      summary: ручка для обновления jwt токенов, access фронту, refresh в куки
       responses:
         "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success_token_refresh'
+                $ref: '#/components/schemas/UserLogResponse'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Success_token_refresh'
+                $ref: '#/components/schemas/UserLogResponse'
             application/x-www-form-urlencoded:
               schema:
-                $ref: '#/components/schemas/Success_token_refresh'
+                $ref: '#/components/schemas/UserLogResponse'
         "default":
           description: Всё нестандартное
           content:
@@ -415,60 +361,15 @@ components:
           type: string
           example: 1. The Token has expired 2. Passwords don't match
 
-
-    Token_refresh:
-      type: object
-      required:
-        - refresh
-      properties:
-        refresh:
-          type: string
-          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcwOTU0ODMxNCwiaWF0IjoxNzA5NDYxOTE0LCJqdGkiOiI3YjFkNGQzMWRjNmQ0OWRiODNjOGNkODQ0NjRkYjI5ZiIsInVzZXJfaWQiOjF9.r_fzNLrsfhhspqK4NflGHtUEHziwbUKKEGqE6SnIpu0
-
-    Success_token_refresh:
-      type: object
-      properties:
-        access:
-          type: string
-          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA5NDYyMjE0LCJpYXQiOjE3MDk0NjE5MTQsImp0aSI6IjQ5YTNkMDJmMGFhYTQ5MDViMjkyOGE3OTNiOWZhNmZlIiwidXNlcl9pZCI6MX0.K7gWkeS4E8Z8up6oeVa0vaE0S_FgLYwXzbAhp7tTyt4
-
     Error_token_refresh:
       type: object
       properties:
-        detail:
+        resultCode:
+          type: integer
+          example: 1
+        message:
           type: string
-          example: Token is invalid or expired
-        code:
-          type: string
-          example: token_not_valid
-
-    Token:
-      type: object
-      properties:
-        email:
-          type: string
-          example: barebuh007@mail.ru
-        password:
-          type: string
-          example: debil228
-
-    Success_token:
-      type: object
-      properties:
-        refresh:
-          type: string
-          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcwOTU0ODMxNCwiaWF0IjoxNzA5NDYxOTE0LCJqdGkiOiI3YjFkNGQzMWRjNmQ0OWRiODNjOGNkODQ0NjRkYjI5ZiIsInVzZXJfaWQiOjF9.r_fzNLrsfhhspqK4NflGHtUEHziwbUKKEGqE6SnIpu0
-        access:
-          type: string
-          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA5NDYyMjE0LCJpYXQiOjE3MDk0NjE5MTQsImp0aSI6IjQ5YTNkMDJmMGFhYTQ5MDViMjkyOGE3OTNiOWZhNmZlIiwidXNlcl9pZCI6MX0.K7gWkeS4E8Z8up6oeVa0vaE0S_FgLYwXzbAhp7tTyt4
-
-    Error_token:
-      type: object
-      properties:
-        detail:
-          type: string
-          example: No active account found with the given credentials
-
+          example: 1. The token does not exist 2. Token is invalid or expired
 
     UserReg:
       type: object
@@ -504,11 +405,10 @@ components:
           example: 0
         message:
           type: string
-          example: SUCCES LOG
+          example: SUCCESS
         access_token:
           type: string
           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA4MTA3MDA4LCJpYXQiOjE3MDgxMDY3MDgsImp0aSI6IjI2YzcyMzk5OTA1ODRlNjA4MzQzOThiN2QwOTg2YTI5IiwidXNlcl9pZCI6MiwiZW1haWwiOiJwcm9maWswMDc3QG1haWwucnUifQ.OYMRmPXBj-A-Qcn-hQAM9kcOD4Rva2F9ugkUruNrEdQ
-
 
     Error_REG:
       type: object
@@ -584,6 +484,3 @@ components:
           type: string
           example: debil@mail.ru
 
-
-
-    

@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import path, include
 
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView, \
+    TokenRefreshSlidingView
 
 from swagger_ui.views import view_swagger_json
 
@@ -27,7 +28,8 @@ from users.views import ChangePassword
 from users.views import UserView
 from users.views import logout_view
 from users.views import home
-from users.views import RegistrUserView, LoginView, register_confirm, RegConfirmRepeat, recovery_password_confirm
+from users.views import RegistrUserView, LoginView, register_confirm, RegConfirmRepeat, recovery_password_confirm, \
+    refresh_tokens
 
 
 
@@ -39,8 +41,7 @@ urlpatterns = [
     path("api/auth/log/", LoginView.as_view()),
     path("api/auth/confirmed/<token>/", register_confirm, name="register_confirm"),
     path("api/auth/confirm_repeat/", RegConfirmRepeat.as_view()),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/refresh/', refresh_tokens, name='token_refresh'),
     #path('api/auth/logout/', logout_view, name='logout'),
     path("api/auth/change_password/", ChangePassword.as_view()),
     path("api/auth/recovery_password/", RecoveryPassword.as_view()),

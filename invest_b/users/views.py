@@ -21,6 +21,8 @@ import jwt
 from rest_framework.views import APIView
 from django.shortcuts import redirect
 # Подключаем модель User
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
 from invest_b import settings
 from .models import User
 # Подключаем UserRegistrSerializer
@@ -156,7 +158,7 @@ class LoginView(APIView):
         """Установка рефреш токена в куки"""
         response = Response()
         response.set_cookie("refresh", str(refresh), httponly=True)
-        response.data = {"resultCode": 0, "message": f"SUCCES LOG",  'access_token': str(refresh.access_token)}
+        response.data = {"resultCode": 0, "message": f"SUCCESS LOG",  'access_token': str(refresh.access_token)}
         return response
 
 class ChangePassword(APIView):
@@ -243,3 +245,32 @@ def logout_view(request):
 
 def home(request):
     return HttpResponse(f"PRIVET")
+
+"""Обновление токенов, акцесс фронту, рефреш в куки"""
+@api_view(('GET',))
+def refresh_tokens(request):
+    value = request.COOKIES.get('refresh')
+    if value is None:
+        return Response({"resultCode": 1, "message": "The token does not exist"})
+
+    try:
+        new_access = RefreshToken(value).access_token
+        payload_jwt = jwt.decode(
+                str(new_access),
+                settings.SIMPLE_JWT['SIGNING_KEY'],
+                algorithms=[settings.SIMPLE_JWT['ALGORITHM']])
+        user = User.objects.get(id=payload_jwt["user_id"])
+
+        new_refresh = RefreshToken.for_user(user)
+        response = Response()
+        response.set_cookie("refresh", str(new_refresh), httponly=True)
+        response.data = {"resultCode": 0, "message": f"SUCCESS", 'access_token': str(new_access)}
+        return response
+
+    except:
+        return Response({"resultCode": 1, "message": f"Token is invalid or expired"})
+
+
+
+
+
