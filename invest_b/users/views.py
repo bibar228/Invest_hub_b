@@ -158,7 +158,7 @@ class LoginView(APIView):
         """Установка рефреш токена в куки"""
         response = Response()
         response.set_cookie("refresh", str(refresh), httponly=True)
-        response.data = {"resultCode": 0, "message": f"SUCCESS LOG",  'access_token': str(refresh.access_token)}
+        response.data = {"resultCode": 0, "message": f"SUCCESS",  'access_token': str(refresh.access_token)}
         return response
 
 class ChangePassword(APIView):
