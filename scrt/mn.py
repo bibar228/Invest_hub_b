@@ -8,8 +8,11 @@ import telebot
 from datetime import datetime
 import psycopg2
 
-api_id = 24512328
-api_hash = "cc5f63b55d33f6a97b1f60336201ff22"
+#api_id = 24512328
+#api_hash = "cc5f63b55d33f6a97b1f60336201ff22"
+
+api_id = 28555014
+api_hash = "d7cb9f8b5a7a33d45f90093a08c6ab08"
 
 api_key = "w2zvYwzp3mBbOaWmPp"
 api_secret = "7qyF3nAAIDVxymR4BeUgpSu5AKvH7mOkKtlv"

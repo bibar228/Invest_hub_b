@@ -29,7 +29,7 @@ from users.views import UserView
 from users.views import logout_view
 from users.views import home
 from users.views import RegistrUserView, LoginView, register_confirm, RegConfirmRepeat, recovery_password_confirm, \
-    refresh_tokens
+    refresh_tokens, logout
 
 
 
@@ -39,6 +39,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/auth/registr/', RegistrUserView.as_view(), name='registr'),
     path("api/auth/log/", LoginView.as_view()),
+    path('api/auth/logout/', logout, name='logout_token'),
     path("api/auth/confirmed/<token>/", register_confirm, name="register_confirm"),
     path("api/auth/confirm_repeat/", RegConfirmRepeat.as_view()),
     path('api/token/refresh/', refresh_tokens, name='token_refresh'),

@@ -1,6 +1,8 @@
 from rest_framework import serializers
 # Подключаем модель user
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import User
 from django.contrib.auth import authenticate

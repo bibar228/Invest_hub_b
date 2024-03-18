@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.core.cache import cache
 from django.shortcuts import render
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework import status, viewsets, permissions
+from rest_framework import status, viewsets, permissions, generics
 # Подключаем компонент для ответа
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -205,7 +205,7 @@ def recovery_password_confirm(request, token):
 
 class RecoveryPassword(APIView):
     permission_classes = (AllowAny,)
-    authentication_classes = ()
+
     serializer_class = RecoveryPasswordSerializer
 
     def post(self, request):
@@ -234,9 +234,10 @@ class RecoveryPassword(APIView):
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     permission_classes = [
-        permissions.AllowAny
+        permissions.IsAuthenticated
     ]
     serializer_class = UserSerializer
+
 
 def logout_view(request):
     if request.method == "GET":
@@ -270,7 +271,19 @@ def refresh_tokens(request):
     except:
         return Response({"resultCode": 1, "message": f"Token is invalid or expired"})
 
+@api_view(('GET',))
+def logout(request):
+    value = request.COOKIES.get('refresh')
+    if value is None:
+        return Response({"resultCode": 1, "message": "The token does not exist"})
 
+    try:
+        response = Response()
+        response.delete_cookie("refresh")
+        response.data = {"resultCode": 0, "message": f"SUCCESS"}
+        return response
 
+    except:
+        return Response({"resultCode": 1, "message": f"Token is invalid or expired"})
 
 

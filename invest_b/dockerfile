@@ -1,0 +1,16 @@
+FROM python:3.10.2
+
+# Устанавливает переменную окружения, которая гарантирует, что вывод из python будет отправлен прямо в терминал без предварительной буферизации
+ENV PYTHONUNBUFFERED 1
+# Устанавливает рабочий каталог контейнера — "app"
+WORKDIR /usr/src/my_djang
+
+COPY requirements.txt /usr/src/requirements.txt
+
+RUN pip install -r /usr/src/requirements.txt
+
+COPY . /usr/src/my_djang
+
+#EXPOSE 8000
+
+#CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

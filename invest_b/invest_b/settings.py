@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     "analize",
     "users",
     'rest_framework_simplejwt',
-    "swagger_ui"
+    "swagger_ui",
+    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [
@@ -107,10 +108,21 @@ DATABASES = {
         'NAME': 'invest',
         'USER': 'mag_user',
         'PASSWORD': 'warlight123',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
+#         'PASSWORD': 'warlight123',
+#         'HOST': 'db',
+#         'PORT': '5432',
+#     }
+# }
 
 
 
