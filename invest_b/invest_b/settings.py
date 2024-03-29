@@ -108,7 +108,7 @@ DATABASES = {
         'NAME': 'invest',
         'USER': 'mag_user',
         'PASSWORD': 'warlight123',
-        'HOST': 'db',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }

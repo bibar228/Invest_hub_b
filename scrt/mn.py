@@ -73,8 +73,23 @@ client.start()
 
 chats = {}
 
+
 for dialog in client.iter_dialogs():
     chats[dialog.id] = dialog.name
+
+
+with open("mess.txt", "w+", encoding="utf-8") as file:
+    for msg in client.iter_messages("Турнички и Братишки", 1000000):
+        if msg.text != "" and len(msg.text.split()) >= 5:
+            try:
+                file.write(msg.text + "\n")
+                print(msg.text)
+            except:
+                pass
+
+
+
+
 
 @client.on(events.NewMessage(chats=["Front & Back guys", "Турнички и Братишки", "CAZADOR CRYPTO", "Плечо Профессора", "Maloletoff | Crypto-Angel", "Crypto▫️Man💎", "Trade Community"]))
 async def normal_handler(event):

@@ -23,6 +23,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from swagger_ui.views import view_swagger_json
 
+from analize.views import SiggsViewSet
 from users.views import RecoveryPassword
 from users.views import ChangePassword
 from users.views import UserView
@@ -49,4 +50,5 @@ urlpatterns = [
     path("api/auth/recovery_password/<token>/", recovery_password_confirm, name="recovery_password_confirm"),
     path("a/", UserView.as_view({'get': 'list'}), name='for_tests_back'),
     path("", home, name='zaglushka'),
+    path('api/siggs', SiggsViewSet.as_view({'get': 'list'}), name='siggs')
     ]
