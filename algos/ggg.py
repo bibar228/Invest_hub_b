@@ -72,17 +72,19 @@ for i in x:
         pr = list(reversed([str(i) for i in t["Open"][:num+1].tolist()]))
         print(tm)
         print(pr)
+        times = time.localtime(time.time())
+        formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", times)
         # m = t["Open"].loc[num:]
         # print(m)
         #res[i[0]] = [str(t.loc[t['Date'] == i[1].split()[0]]["Open"]).split()[1], price]
-        values = (i[0], i[1], "LONG", str(t.loc[t['Date'] == i[1].split()[0]]["Open"]).split()[1], price, 'CRYPTO-ANGEL: PRIVATE')
+        values = (i[0], i[1], formatted_time, "LONG", str(t.loc[t['Date'] == i[1].split()[0]]["Open"]).split()[1], price, 'CRYPTO-ANGEL: PRIVATE')
         try:
             connection = psycopg2.connect(host='127.0.0.1', port=5432, user='mag_user', password='warlight123',
                                           database='invest')
             try:
                 with connection.cursor() as cursor:
-                    insert_query = "INSERT INTO analize_siggs (cryptocode, init_time, trade_position, trade_position_start, trade_position_end, signal_owner)" \
-                                   "VALUES (%s, %s, %s, %s, %s, %s) RETURNING id;"
+                    insert_query = "INSERT INTO analize_siggs (cryptocode, init_time, end_time, trade_position, trade_position_start, trade_position_end, signal_owner)" \
+                                   "VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id;"
                     cursor.execute(insert_query, values)
                     id_change = cursor.fetchone()[0]
                     connection.commit()

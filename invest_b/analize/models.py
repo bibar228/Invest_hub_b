@@ -24,6 +24,7 @@ class Orders(models.Model):
 class Siggs(models.Model):
     cryptocode = models.CharField(max_length=30)
     init_time = models.CharField(max_length=30)
+    end_time = models.CharField(max_length=30)
     trade_position = models.CharField(verbose_name="LONG/SHORT", max_length=15)
     trade_position_start = models.FloatField(verbose_name="Цена покупки")
     trade_position_end = models.FloatField(verbose_name="Цена продажи")
@@ -36,4 +37,4 @@ class Siggs(models.Model):
         verbose_name_plural = 'Данные сигналов'
 
     def __str__(self):
-        return self.cryptoCode
+        return self.cryptocode
